@@ -13,10 +13,12 @@ const styles =  StyleSheet.create({
     container: {
         backgroundColor: '#3b71f3',
 
-        width: '80%',
+        width: '85%',
 
         padding: 15,
-        marginVertical: 40,
+        marginVertical: 10,
+        
+      
 
         alignItems: 'center',
         borderRadius: 10,
@@ -30,6 +32,12 @@ const styles =  StyleSheet.create({
         backgroundColor: 'transparent',
         
     },
+    container_SECONDARY:{
+        backgroundColor: 'transparent',
+        borderColor: '#3b71f3',
+        borderWidth: 3,
+        
+    },
 
     text: {
         fontWeight: 'bold',
@@ -39,6 +47,10 @@ const styles =  StyleSheet.create({
     text_TERTIARY: {
         color: 'gray',
         textDecorationLine: 'underline',
+    },
+    text_SECONDARY: {
+        color: '#3b71f3',
+        
     },
 
 });

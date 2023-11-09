@@ -1,12 +1,13 @@
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import SignInScreen from './src/screens/SignInScreen';
+import Navigation from './src/navigation';
+
 
 export default function App() {
   return (
     <View style={styles.root}>
-      <SignInScreen />
+      <Navigation />
       <StatusBar style="auto" />
     </View>
   );

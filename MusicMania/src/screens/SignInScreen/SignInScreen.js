@@ -4,23 +4,29 @@ import Logo from '../../../assets/images/Logo_4.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
+import { useNavigation } from '@react-navigation/native';
 
 const SignInScreen = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
     const { height } = Dimensions.get('window');
+    const navigation = useNavigation();
 
     const onSignInPressed = () => {
-        console.warn("Sign in");
+        
+        //validate user
+        navigation.navigate('Home');
     }
 
     const onForgotPasswordPressed = () => {
-        console.warn("ForgotPass");
+        navigation.navigate('ForgotPassword');
+
     }
 
     const onSignUpPressed = () => {
-        console.warn("Sign Up");
+        navigation.navigate('SignUp');
+
     }
 
     return (
@@ -34,10 +40,11 @@ const SignInScreen = () => {
                 <AntDesign name="lock" size={24} color="black" style={styles.icon} />
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
             </View>
+           
+            <CustomButton text="Sign In" onPress={onSignInPressed} />
             <View style={styles.forgotPasswordContainer}>
                 <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY" />
             </View>
-            <CustomButton text="Sign In" onPress={onSignInPressed} />
             
             <CustomButton text="Don't have an account? Create one" onPress={onSignUpPressed} type="TERTIARY" />
             
@@ -50,10 +57,11 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingTop: 100,
+        paddingTop: 50,
         backgroundColor: 'lavender',
     },
     logo: {
+        
         width: '30%',
         height: 100,
         maxWidth: 300,
@@ -72,7 +80,7 @@ const styles = StyleSheet.create({
     forgotPasswordContainer: {
         flexDirection: 'row',
         justifyContent: 'flex-start', // Align to the left
-        marginVertical: -50,
+        marginVertical: 10,
     },
     signupContainer: {
         flexDirection: 'row',
