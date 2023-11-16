@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Modal, TouchableHighlight } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
-const Home = ({ navigation }) => {
+
+const Home = () => {
   const [modalVisible, setModalVisible] = useState(false);
+  const navigation = useNavigation();
 
   const openModal = () => {
     setModalVisible(true);
@@ -13,12 +17,39 @@ const Home = ({ navigation }) => {
     setModalVisible(false);
   };
 
+  
+
+  const onLeaderboardPressed = () => {
+   navigation.navigate('Leaderboard');
+
+  }
+
+  const onProfilePressed = () => {
+    navigation.navigate('Profile');
+ 
+ }
+
+ const onGuessTheSongPressed = () => {
+  closeModal(); // Close the modal
+  navigation.navigate('GuessTheSong');
+};
+
+const onGuessTheAlbumPressed = () => {
+  closeModal(); // Close the modal
+  navigation.navigate('GuessTheAlbum');
+};
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.headerText}>
-        <Text style={styles.boldText}>Dive into the Beat</Text> with{'\n'}
-        <Text style={[styles.boldText, styles.musicManiaText]}>Music Mania!</Text>
-      </Text>
+    <LinearGradient
+      colors={['#3498db', '#e74c3c']} // Adjust these colors as per your preference
+      style={styles.container}
+    >
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>
+          <Text style={styles.boldText}>Welcome to</Text>{'\n'}
+          <Text style={[styles.boldText, styles.musicManiaText]}>Music Mania!</Text>
+        </Text>
+      </View>
 
       <View style={styles.centeredContent}>
         <TouchableOpacity style={styles.playButton} onPress={openModal}>
@@ -33,19 +64,19 @@ const Home = ({ navigation }) => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <TouchableOpacity style={styles.gameOption} onPress={() => navigation.navigate('GuessTheSong')}>
+              <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
                 <MaterialCommunityIcons name="music-note" size={30} color="#3498db" />
                 <Text style={styles.gameOptionText}>Guess the Song</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.gameOption} onPress={() => navigation.navigate('GuessTheAlbum')}>
+              <TouchableOpacity style={styles.gameOption} onPress={onGuessTheAlbumPressed}>
                 <MaterialCommunityIcons name="album" size={30} color="#e74c3c" />
                 <Text style={styles.gameOptionText}>Guess the Album</Text>
               </TouchableOpacity>
 
-              <TouchableHighlight onPress={closeModal} style={styles.closeButton}>
+              <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableHighlight>
+              </TouchableOpacity>
             </View>
           </View>
         </Modal>
@@ -53,21 +84,21 @@ const Home = ({ navigation }) => {
 
       <View style={styles.bottomIcons}>
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
-          <MaterialCommunityIcons name="home" size={30} color="black" />
+          <MaterialCommunityIcons name="home" size={30} color="white" />
           <Text style={styles.iconText}>Home</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Leaderboard')}>
-          <MaterialCommunityIcons name="trophy" size={30} color="black" />
+        <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
+          <MaterialCommunityIcons name="trophy" size={30} color="white" />
           <Text style={styles.iconText}>Leaderboard</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Profile')}>
-          <MaterialCommunityIcons name="account" size={30} color="black" />
+        <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
+          <MaterialCommunityIcons name="account" size={30} color="white" />
           <Text style={styles.iconText}>Profile</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -75,33 +106,40 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 100,
-    backgroundColor: 'lavender',
+    paddingTop: 10,
+  },
+  headerContainer: {
+    flex: 1,
+    justifyContent: 'filex-start',
+    alignItems: 'center',
+    marginTop: 100,
   },
   headerText: {
     fontSize: 24,
-    marginBottom: 20,
     textAlign: 'center',
+    color: 'white', // Text color
   },
   boldText: {
     fontWeight: 'bold',
-    color: '#6c5ce7',
+    color: '#ecf0f1', // Header text color
   },
   musicManiaText: {
     fontSize: 28,
-    color: '#ff7f50',
+    color: '#e74c3c', // Music Mania text color
+    
   },
   centeredContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 100,
   },
   playButton: {
-    backgroundColor: '#3498db',
+    backgroundColor: '#2c3e50', // Play button color
     borderRadius: 50,
     padding: 20,
     alignItems: 'center',
-    marginBottom: 20,
+    marginBottom: 200,
   },
   modalContainer: {
     flex: 1,
@@ -150,6 +188,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     textAlign: 'center',
+    color: 'white', // Icon text color
   },
 });
 
