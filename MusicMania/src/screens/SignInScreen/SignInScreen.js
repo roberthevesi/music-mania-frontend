@@ -3,7 +3,7 @@ import { View, Text, Image, StyleSheet, Dimensions, ScrollView } from 'react-nat
 import Logo from '../../../assets/images/Logo_4.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
-import { AntDesign } from '@expo/vector-icons'; // Import AntDesign icons
+import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 
 const SignInScreen = () => {
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     },
     forgotPasswordContainer: {
         flexDirection: 'row',
-        justifyContent: 'flex-start', // Align to the left
+        justifyContent: 'flex-start', 
         marginVertical: 10,
     },
     signupContainer: {

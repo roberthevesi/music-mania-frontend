@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Modal } from 'react-native';
+import { View, TouchableOpacity, Text, Image, StyleSheet, Modal } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import Logo from '../../../assets/images/record.png';
+import Logo_2 from '../../../assets/images/song.png';
+
 
 
 const Home = () => {
   const [modalVisible, setModalVisible] = useState(false);
+
   const navigation = useNavigation();
 
   const openModal = () => {
@@ -17,31 +21,29 @@ const Home = () => {
     setModalVisible(false);
   };
 
-  
-
   const onLeaderboardPressed = () => {
-   navigation.navigate('Leaderboard');
-
-  }
+    navigation.navigate('Leaderboard');
+  };
 
   const onProfilePressed = () => {
     navigation.navigate('Profile');
- 
- }
+  };
 
- const onGuessTheSongPressed = () => {
-  closeModal(); // Close the modal
-  navigation.navigate('GuessTheSong');
-};
+  const onGuessTheSongPressed = () => {
+    closeModal(); // Close the modal
+    navigation.navigate('GuessTheSong');
+  };
 
-const onGuessTheAlbumPressed = () => {
-  closeModal(); // Close the modal
-  navigation.navigate('GuessTheAlbum');
-};
+  
+  const onGuessTheAlbumPressed = () => {
+    closeModal(); // Close the modal
+    navigation.navigate('GuessTheAlbum');
+  };
 
+  
   return (
     <LinearGradient
-      colors={['#3498db', '#e74c3c']} // Adjust these colors as per your preference
+      colors={['#B19CD9', '#FF3F3F']}
       style={styles.container}
     >
       <View style={styles.headerContainer}>
@@ -64,16 +66,19 @@ const onGuessTheAlbumPressed = () => {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
+              {/* "Guess the Song" button */}
               <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
-                <MaterialCommunityIcons name="music-note" size={30} color="#3498db" />
-                <Text style={styles.gameOptionText}>Guess the Song</Text>
+                <Image source={Logo_2} style={[styles.logo]} resizeMode="contain" />
+                <Text style={styles.gameOptionText}>GUESS THE SONG</Text>
               </TouchableOpacity>
 
+              {/* "Guess the Album" button */}
               <TouchableOpacity style={styles.gameOption} onPress={onGuessTheAlbumPressed}>
-                <MaterialCommunityIcons name="album" size={30} color="#e74c3c" />
-                <Text style={styles.gameOptionText}>Guess the Album</Text>
+                <Image source={Logo} style={[styles.logo]} resizeMode="contain" />  
+                <Text style={styles.gameOptionText}>GUESS THE ALBUM</Text>
               </TouchableOpacity>
 
+              {/* Close button */}
               <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
                 <Text style={styles.closeButtonText}>Close</Text>
               </TouchableOpacity>
@@ -82,6 +87,7 @@ const onGuessTheAlbumPressed = () => {
         </Modal>
       </View>
 
+      {/* Bottom navigation icons */}
       <View style={styles.bottomIcons}>
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
           <MaterialCommunityIcons name="home" size={30} color="white" />
@@ -102,6 +108,7 @@ const onGuessTheAlbumPressed = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -110,23 +117,28 @@ const styles = StyleSheet.create({
   },
   headerContainer: {
     flex: 1,
-    justifyContent: 'filex-start',
+    justifyContent: 'center',
     alignItems: 'center',
     marginTop: 100,
   },
   headerText: {
     fontSize: 24,
     textAlign: 'center',
-    color: 'white', // Text color
+    color: 'white', 
   },
   boldText: {
     fontWeight: 'bold',
-    color: '#ecf0f1', // Header text color
+    color: '#ecf0f1',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2, 
   },
   musicManiaText: {
-    fontSize: 28,
-    color: '#e74c3c', // Music Mania text color
-    
+    fontSize: 50,
+    color: '#FF3F3F',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
   centeredContent: {
     flex: 1,
@@ -135,7 +147,7 @@ const styles = StyleSheet.create({
     marginBottom: 100,
   },
   playButton: {
-    backgroundColor: '#2c3e50', // Play button color
+    backgroundColor: '#2c3e50', 
     borderRadius: 50,
     padding: 20,
     alignItems: 'center',
@@ -148,7 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
-    backgroundColor: 'white',
+    backgroundColor: 'lavender',
     borderRadius: 10,
     padding: 20,
     width: '80%',
@@ -158,13 +170,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 15,
   },
+  gameImage: {
+    width: 150,
+    height: 150,
+    borderRadius: 10,
+    marginBottom: 5,
+  },
   gameOptionText: {
     fontSize: 16,
+    color: '#FF3F3F',
     marginTop: 5,
+    fontWeight: 'bold', 
+    fontFamily: 'System',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 1,
   },
   closeButton: {
     backgroundColor: '#e74c3c',
-    borderRadius: 5,
+    borderRadius: 100,
     padding: 10,
     alignItems: 'center',
     marginTop: 10,
@@ -188,8 +212,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     textAlign: 'center',
-    color: 'white', // Icon text color
+    color: 'white', 
   },
+  
 });
+
 
 export default Home;
