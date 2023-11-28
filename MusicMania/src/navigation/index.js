@@ -11,6 +11,8 @@ import LeaderboardScreen from '../screens/LeaderboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import GuessTheAlbumScreen from '../screens/GuessTheAlbumScreen';
 import GuessTheSongScreen from '../screens/GuessTheSongScreen';
+import SettingsScreen from '../screens/SettingsScreen';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,6 +31,9 @@ const Navigation = () => {
                 <Stack.Screen name="Profile" component={ProfileScreen}/>
                 <Stack.Screen name="GuessTheAlbum" component={GuessTheAlbumScreen}/>
                 <Stack.Screen name="GuessTheSong" component={GuessTheSongScreen}/>
+                <Stack.Screen name="Settings" component={SettingsScreen}/>
+                <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
+
 
 
             </Stack.Navigator>

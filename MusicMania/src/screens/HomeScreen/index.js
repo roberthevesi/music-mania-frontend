@@ -26,7 +26,14 @@ const Home = () => {
   };
 
   const onProfilePressed = () => {
-    navigation.navigate('Profile');
+    const userData = {
+      username: 'JohnDoe',
+      email: 'john.doe@example.com',
+      profilePicture: 'https://example.com/path-to-profile-picture.jpg',
+      totalScore: 500, // Replace with the actual total score
+    };
+  
+    navigation.navigate('Profile', userData);
   };
 
   const onGuessTheSongPressed = () => {
