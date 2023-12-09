@@ -1,24 +1,32 @@
-import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, Image, StyleSheet, Modal } from 'react-native';
+
+
+import React, { useState, useEffect } from 'react';
+import { View, TouchableOpacity, Text, Image, StyleSheet, Animated, Easing } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import Logo from '../../../assets/images/record.png';
 import Logo_2 from '../../../assets/images/song.png';
 
-
-
 const Home = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-
+  const [fadeAnimation] = useState(new Animated.Value(1));
+  const [showGames, setShowGames] = useState(false);
   const navigation = useNavigation();
 
-  const openModal = () => {
-    setModalVisible(true);
-  };
+  useEffect(() => {
+    startFadeAnimation();
+  }, []);
 
-  const closeModal = () => {
-    setModalVisible(false);
+  const startFadeAnimation = () => {
+    Animated.timing(fadeAnimation, {
+      toValue: 0,
+      duration: 1200,
+      easing: Easing.linear,
+      useNativeDriver: true,
+    }).start(() => {
+      
+      setShowGames(true);
+    });
   };
 
   const onLeaderboardPressed = () => {
@@ -28,73 +36,43 @@ const Home = () => {
   const onProfilePressed = () => {
     const userData = {
       username: 'JohnDoe',
-      email: 'john.doe@example.com',
-      profilePicture: 'https://example.com/path-to-profile-picture.jpg',
-      totalScore: 500, // Replace with the actual total score
+      profilePicture: 'https://source.unsplash.com/200x200/?portrait',
+      totalScore: 500,
     };
-  
     navigation.navigate('Profile', userData);
   };
 
   const onGuessTheSongPressed = () => {
-    closeModal(); // Close the modal
     navigation.navigate('GuessTheSong');
   };
 
-  
   const onGuessTheAlbumPressed = () => {
-    closeModal(); // Close the modal
+    
     navigation.navigate('GuessTheAlbum');
   };
 
-  
   return (
-    <LinearGradient
-      colors={['#B19CD9', '#FF3F3F']}
-      style={styles.container}
-    >
-      <View style={styles.headerContainer}>
-        <Text style={styles.headerText}>
-          <Text style={styles.boldText}>Welcome to</Text>{'\n'}
-          <Text style={[styles.boldText, styles.musicManiaText]}>Music Mania!</Text>
-        </Text>
-      </View>
+    <LinearGradient colors={['#673AB7', '#001F3F']} style={styles.container}>
+      {showGames ? (
+        
+        <View style={styles.centeredContent}>
+          <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
+            <Image source={Logo_2} style={styles.logo} resizeMode="contain" />
+            <Text style={styles.gameOptionText}>GUESS THE SONG</Text>
+          </TouchableOpacity>
 
-      <View style={styles.centeredContent}>
-        <TouchableOpacity style={styles.playButton} onPress={openModal}>
-          <MaterialCommunityIcons name="play" size={50} color="white" />
-        </TouchableOpacity>
+          <TouchableOpacity style={styles.gameOption} onPress={onGuessTheAlbumPressed}>
+            <Image source={Logo} style={styles.logo} resizeMode="contain" />
+            <Text style={styles.gameOptionText}>GUESS THE ALBUM</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        
+        <Animated.View style={[styles.centeredContent, { opacity: fadeAnimation }]}>
+          <Text style={[styles.boldText, styles.musicManiaText]}> MUSIC MANIA</Text>
+        </Animated.View>
+      )}
 
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={closeModal}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              {/* "Guess the Song" button */}
-              <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
-                <Image source={Logo_2} style={[styles.logo]} resizeMode="contain" />
-                <Text style={styles.gameOptionText}>GUESS THE SONG</Text>
-              </TouchableOpacity>
-
-              {/* "Guess the Album" button */}
-              <TouchableOpacity style={styles.gameOption} onPress={onGuessTheAlbumPressed}>
-                <Image source={Logo} style={[styles.logo]} resizeMode="contain" />  
-                <Text style={styles.gameOptionText}>GUESS THE ALBUM</Text>
-              </TouchableOpacity>
-
-              {/* Close button */}
-              <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                <Text style={styles.closeButtonText}>Close</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-      </View>
-
-      {/* Bottom navigation icons */}
       <View style={styles.bottomIcons}>
         <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
           <MaterialCommunityIcons name="home" size={30} color="white" />
@@ -115,94 +93,56 @@ const Home = () => {
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
     paddingTop: 10,
   },
-  headerContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 100,
-  },
-  headerText: {
-    fontSize: 24,
-    textAlign: 'center',
-    color: 'white', 
-  },
-  boldText: {
-    fontWeight: 'bold',
-    color: '#ecf0f1',
-    textShadowColor: 'black',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2, 
-  },
-  musicManiaText: {
-    fontSize: 50,
-    color: '#FF3F3F',
-    textShadowColor: 'black',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 2,
-  },
   centeredContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 100,
   },
-  playButton: {
-    backgroundColor: '#2c3e50', 
-    borderRadius: 50,
-    padding: 20,
-    alignItems: 'center',
-    marginBottom: 200,
+  boldText: {
+    alignContent: 'center',
+    fontWeight: '100',
+    color: '#ecf0f1',
+    textShadowColor: 'white',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
   },
-  modalContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContent: {
-    backgroundColor: 'lavender',
-    borderRadius: 10,
-    padding: 20,
-    width: '80%',
-    alignItems: 'center',
+  musicManiaText: {
+    alignContent: 'center',
+    fontSize: 120,
+    color: '#FF3F3F',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 10,
   },
   gameOption: {
     alignItems: 'center',
-    marginBottom: 15,
-  },
-  gameImage: {
-    width: 150,
-    height: 150,
-    borderRadius: 10,
     marginBottom: 5,
   },
+  logo: {
+    width: 250,
+    height: 250,
+    borderRadius: 10,
+    marginBottom: 15,
+    borderWidth: 0, 
+    borderColor: '#FFFFFF', 
+
+  },
   gameOptionText: {
-    fontSize: 16,
-    color: '#FF3F3F',
+    fontSize: 20,
+    marginBottom: 50,
+    color: '#FFFF',
     marginTop: 5,
-    fontWeight: 'bold', 
-    fontFamily: 'System',
+    fontWeight: '300',
     textShadowColor: 'black',
-    textShadowOffset: { width: 1, height: 1 },
-    textShadowRadius: 1,
-  },
-  closeButton: {
-    backgroundColor: '#e74c3c',
-    borderRadius: 100,
-    padding: 10,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  closeButtonText: {
-    color: 'white',
-    fontSize: 16,
+    textShadowOffset: { width: 5, height: 5 },
+    textShadowRadius: 5,
+ 
   },
   bottomIcons: {
     flexDirection: 'row',
@@ -219,10 +159,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     textAlign: 'center',
-    color: 'white', 
+    color: 'white',
   },
-  
 });
-
 
 export default Home;
