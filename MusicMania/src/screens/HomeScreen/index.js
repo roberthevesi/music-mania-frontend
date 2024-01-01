@@ -73,22 +73,24 @@ const Home = () => {
         </Animated.View>
       )}
 
-      <View style={styles.bottomIcons}>
-        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
-          <MaterialCommunityIcons name="home" size={30} color="white" />
-          <Text style={styles.iconText}>Home</Text>
-        </TouchableOpacity>
+<View style={styles.bottomIconsContainer}>
+          <View style={styles.bottomIcons}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
+              <MaterialCommunityIcons name="home" size={30} color="white" />
+              <Text style={styles.iconText}>Home</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
-          <MaterialCommunityIcons name="trophy" size={30} color="white" />
-          <Text style={styles.iconText}>Leaderboard</Text>
-        </TouchableOpacity>
+            <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
+              <MaterialCommunityIcons name="trophy" size={30} color="white" />
+              <Text style={styles.iconText}>Leaderboard</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
-          <MaterialCommunityIcons name="account" size={30} color="white" />
-          <Text style={styles.iconText}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+            <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
+              <MaterialCommunityIcons name="account" size={30} color="white" />
+              <Text style={styles.iconText}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
     </LinearGradient>
   );
 };
@@ -97,7 +99,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
-    paddingTop: 10,
+    paddingTop: 50,
   },
   centeredContent: {
     flex: 1,
@@ -144,20 +146,28 @@ const styles = StyleSheet.create({
     textShadowRadius: 5,
  
   },
+  bottomIconsContainer: {
+    width: '100%',
+    height: 80,
+    backgroundColor: '#673AB7', 
+    paddingBottom: 35, 
+  },
   bottomIcons: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
-    position: 'absolute',
-    bottom: 20,
+    bottom: 0,
     width: '100%',
+    
   },
+
   iconButton: {
+    marginTop: 10,
     alignItems: 'center',
   },
   iconText: {
-    fontSize: 14,
-    marginTop: 5,
+    fontSize: 13,
+    marginTop: 8,
     textAlign: 'center',
     color: 'white',
   },

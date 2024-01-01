@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, Platform, FlatList } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, Platform, FlatList, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+
 import Logo from '../../../assets/images/record.png';
 import Logo_2 from '../../../assets/images/song.png';
 
@@ -43,10 +45,23 @@ const ProfileScreen = ({ route }) => {
     navigation.navigate('GuessTheAlbum');
   };
 
+  const onLeaderboardPressed = () => {
+    navigation.navigate('Learderboard');
+  };
+
+  const onProfilePressed = () => {
+    navigation.navigate('Profiel');
+  };
+
+  const onHomePressed = () => {
+    navigation.navigate('Home');
+  };
+
   return (
+    <ScrollView contentContainerStyle={styles.container}>
     <LinearGradient
     colors={['#001F3F', '#1E1E1E']}
-    style={styles.container}
+    style={styles.linearGradient}
   >
     <View style={styles.userInfo}>
       {profilePicture && (
@@ -95,10 +110,29 @@ const ProfileScreen = ({ route }) => {
         <Text style={styles.buttonText}>Logout</Text>
       </TouchableOpacity>
     </View>
-  </LinearGradient>
+
+    <View style={styles.bottomIconsContainer}>
+          <View style={styles.bottomIcons}>
+            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
+              <MaterialCommunityIcons name="home" size={30} color="white" />
+              <Text style={styles.iconText}>Home</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
+              <MaterialCommunityIcons name="trophy" size={30} color="white" />
+              <Text style={styles.iconText}>Leaderboard</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
+              <MaterialCommunityIcons name="account" size={30} color="white" />
+              <Text style={styles.iconText}>Profile</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </LinearGradient>
+    </ScrollView>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -106,7 +140,11 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    paddingHorizontal: 20,
+    paddingHorizontal: 0,
+  },
+  linearGradient: {
+    flex: 1,
+    width: '100%', 
   },
   userInfo: {
     alignItems: 'center',
@@ -214,6 +252,31 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 16,
     marginLeft: 10,
+  },
+  bottomIconsContainer: {
+    width: '100%',
+    height: 80,
+    backgroundColor: '#673AB7', 
+    paddingBottom: 35, 
+  },
+  bottomIcons: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    bottom: 0,
+    width: '100%',
+    
+  },
+
+  iconButton: {
+    marginTop: 10,
+    alignItems: 'center',
+  },
+  iconText: {
+    fontSize: 13,
+    marginTop: 8,
+    textAlign: 'center',
+    color: 'white',
   },
 });
 
