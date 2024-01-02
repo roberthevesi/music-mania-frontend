@@ -8,6 +8,7 @@ import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import UserContext from '../../contexts/UserContext';
+import base64 from 'react-native-base64';
 
 const SignInScreen = () => {
     const [loginError, setLoginError] = useState('');
@@ -15,13 +16,14 @@ const SignInScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { setUserData } = useContext(UserContext);
+    const { userData, setUserData } = useContext(UserContext);
 
     const { height } = Dimensions.get('window');
     const navigation = useNavigation();
 
     const onSignInPressed = async () => {
         try {
+
             const response = await axios.get('http://localhost:8080/api/users/get-user', {
                 params: {
                     email: email,
@@ -29,11 +31,47 @@ const SignInScreen = () => {
                 }
             });
 
-            setUserData(response.data);
-            navigation.navigate('Home');
-            setLoginError('');
-            setEmail('');
-            setPassword('');
+            // setUserData(response.data);
+
+            var obtained_data = response.data;
+
+            // const obtained_username = response.data.username;
+            // const obtained_password = password;
+
+            try{
+                console.log('username:', obtained_data.username, password);
+                const authHeader = 'Basic ' + base64.encode(obtained_data.username + ':' + password); // did this because we need
+                                                                                                 // username (user logs in with email)
+                                                                                                 // and RAW password, not encrypted
+                                                                                                 // (which we have in response)
+
+                const token_response = await axios.get('http://localhost:8080/api/users/get-token', {
+                    headers: {
+                        'Authorization': authHeader
+                    }
+                });
+
+                const updated_user_data = {
+                    ...obtained_data,
+                    token: token_response.data
+                }; 
+
+                setUserData(updated_user_data);
+
+                console.log('Token: ', token_response.data);
+                console.log('userData: ', updated_user_data);
+
+                navigation.navigate('Home');
+                setLoginError('');
+                setEmail('');
+                setPassword('');
+
+            } catch (error) {
+                console.error('Error fetching token: ', error);
+                setLoginError('An error occured. Please try again.');
+            }
+
+            
         } catch (error) {
             console.error('Error fetching data: ', error);
             setLoginError('Invalid Email or Password.');
