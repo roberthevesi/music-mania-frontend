@@ -31,15 +31,9 @@ const SignInScreen = () => {
                 }
             });
 
-            // setUserData(response.data);
-
             var obtained_data = response.data;
 
-            // const obtained_username = response.data.username;
-            // const obtained_password = password;
-
             try{
-                console.log('username:', obtained_data.username, password);
                 const authHeader = 'Basic ' + base64.encode(obtained_data.username + ':' + password); // did this because we need
                                                                                                  // username (user logs in with email)
                                                                                                  // and RAW password, not encrypted
@@ -58,7 +52,6 @@ const SignInScreen = () => {
 
                 setUserData(updated_user_data);
 
-                console.log('Token: ', token_response.data);
                 console.log('userData: ', updated_user_data);
 
                 navigation.navigate('Home');
@@ -88,6 +81,8 @@ const SignInScreen = () => {
 
     }
 
+    const isButtonDisabled = !email || !password;
+
     return (
         <ScrollView contentContainerStyle={styles.root}>
 
@@ -103,7 +98,12 @@ const SignInScreen = () => {
                 <CustomInput placeholder="Password" value={password} setValue={setPassword} autoCapitalize="none" secureTextEntry={true} />
             </View>
            
-            <CustomButton text="Sign In" onPress={onSignInPressed} />
+            {/* <CustomButton text="Sign In" onPress={onSignInPressed} /> */}
+            <CustomButton 
+                text="Sign In" 
+                onPress={onSignInPressed} 
+                disabled={isButtonDisabled} // Pass the disabled state
+            />
 
             {loginError ? <Text style={styles.errorMessage}>{loginError}</Text> : null}
 

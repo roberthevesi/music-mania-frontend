@@ -1,15 +1,38 @@
 import React from 'react'
 import { View, Text, StyleSheet, Pressable,} from 'react-native'
 
-const CustomButton = ({onPress, text, type = "PRIMARY" }) => {
+const CustomButton = ({onPress, text, type = "PRIMARY", disabled = false }) => {
     return(
-        <Pressable onPress={onPress} style={[styles.container, styles[`container_${type}`]]}>
-            <Text style={[styles.text, styles[`text_${type}`]]}>{text}</Text>
+        <Pressable 
+            onPress={disabled ? null : onPress} 
+            style={[
+                styles.container, 
+                styles[`container_${type}`],
+                disabled && styles.container_DISABLED
+            ]}
+            disabled={disabled}
+        >
+            <Text style={[
+                styles.text, 
+                styles[`text_${type}`],
+                disabled && styles.text_DISABLED
+            ]}>
+                {text}
+            </Text>
         </Pressable>
     )
 }
 
 const styles =  StyleSheet.create({
+    container_DISABLED: {
+        backgroundColor: 'grey', // Disabled state style
+        // Other styles for disabled state
+    },
+
+    text_DISABLED: {
+        color: '#ccc', // Disabled text color
+    },
+
     container: {
         backgroundColor: '#3b71f3',
 
