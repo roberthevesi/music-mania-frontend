@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, StatusBar, Platform, FlatList, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import UserContext from '../../contexts/UserContext';
 
 import Logo from '../../../assets/images/record.png';
 import Logo_2 from '../../../assets/images/song.png';
 
 
 const ProfileScreen = ({ route }) => {
+  const { userData, setUserData } = useContext(UserContext);
+
   const { username = 'Guest', profilePicture, totalScore } = route.params ?? {};
   const navigation = useNavigation();
 
@@ -19,6 +23,7 @@ const ProfileScreen = ({ route }) => {
   ]);
 
   const onLogOutPressed = () => {
+    setUserData(null);
     navigation.navigate('SignIn');
   };
 
@@ -67,12 +72,13 @@ const ProfileScreen = ({ route }) => {
       {profilePicture && (
         <Image source={{ uri: profilePicture }} style={styles.profilePicture} />
       )}
-      <Text style={styles.username}>{username}</Text>
+
+      <Text style={styles.username}>{userData.username}</Text>
 
       <View style={styles.totalScoreContainer}>
         <View style={styles.totalScoreSquare}>
           <Text style={styles.totalScoreLabel}>Total Score:</Text>
-          <Text style={styles.totalScore}>{totalScore} <Feather name="star" size={20} color="red" style={styles.starIcon} /></Text>
+          <Text style={styles.totalScore}>{userData.score} <Feather name="star" size={20} color="red" style={styles.starIcon} /></Text>
         </View>
       </View>
     </View>

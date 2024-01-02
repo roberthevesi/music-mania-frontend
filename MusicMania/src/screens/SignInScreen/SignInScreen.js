@@ -1,22 +1,43 @@
 import React, { useState } from 'react';
+import { useContext } from 'react';
 import { View, Text, Image, StyleSheet, Dimensions, ScrollView } from 'react-native';
 import Logo from '../../../assets/images/Logo_4.png';
 import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import UserContext from '../../contexts/UserContext';
 
 const SignInScreen = () => {
-    const [username, setUsername] = useState('');
+    const [loginError, setLoginError] = useState('');
+
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+    const { setUserData } = useContext(UserContext);
 
     const { height } = Dimensions.get('window');
     const navigation = useNavigation();
 
-    const onSignInPressed = () => {
-        
-       
-        navigation.navigate('Home');
+    const onSignInPressed = async () => {
+        try {
+            const response = await axios.get('http://localhost:8080/api/users/get-user', {
+                params: {
+                    email: email,
+                    password: password
+                }
+            });
+
+            setUserData(response.data);
+            navigation.navigate('Home');
+            setLoginError('');
+            setEmail('');
+            setPassword('');
+        } catch (error) {
+            console.error('Error fetching data: ', error);
+            setLoginError('Invalid Email or Password.');
+        }
     }
 
     const onForgotPasswordPressed = () => {
@@ -31,17 +52,24 @@ const SignInScreen = () => {
 
     return (
         <ScrollView contentContainerStyle={styles.root}>
+
             <Image source={Logo} style={[styles.logo, { height: height * 0.3 }]} resizeMode="contain" />
+
             <View style={styles.inputContainer}>
                 <AntDesign name="user" size={24} color="black" style={styles.icon} />
-                <CustomInput placeholder="Username" value={username} setValue={setUsername} />
+                <CustomInput placeholder="Email" value={email} setValue={setEmail} autoCapitalize="none"/>
             </View>
+
             <View style={styles.inputContainer}>
                 <AntDesign name="lock" size={24} color="black" style={styles.icon} />
-                <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
+                <CustomInput placeholder="Password" value={password} setValue={setPassword} autoCapitalize="none" secureTextEntry={true} />
             </View>
            
             <CustomButton text="Sign In" onPress={onSignInPressed} />
+
+            {loginError ? <Text style={styles.errorMessage}>{loginError}</Text> : null}
+
+
             <View style={styles.forgotPasswordContainer}>
                 <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY" />
             </View>
@@ -53,6 +81,10 @@ const SignInScreen = () => {
 };
 
 const styles = StyleSheet.create({
+    errorMessage: {
+        color: 'red', // Choose an appropriate color for error messages
+        marginVertical: 10, // Adjust spacing as needed
+    },
     root: {
         flex: 1,
         justifyContent: 'center',
