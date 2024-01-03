@@ -4,20 +4,46 @@ import CustomInput from '../../components/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+import { Alert } from 'react-native';
 
 const ForgotPasswordScreen = () => {
-    const [username, setUsername] = useState('');
+    const [loginError, setLoginError] = useState('');
+    const [email, setEmail] = useState('');
 
     const navigation = useNavigation();
 
-    const onSendPressed = () => {
-        navigation.navigate('NewPassword');
+    const onSendPressed = async () => {
+        console.log("email:", email);
+        try {
+
+
+            const url = `http://localhost:8080/api/users/send-forgot-password-code?email=${encodeURIComponent(email)}`;
+
+            const response = await axios.post(url);
+
+            // const response = await axios.post('http://localhost:8080/api/users/send-forgot-password-code', {
+            //     email: email
+            // });
+
+            // const code = response.data.code;
+
+            // console.log(response.data.code);
+            navigation.navigate('NewPassword', { email: email });
+            setLoginError('');
+
+        } catch (error) {
+            console.error('Error sending code: ', error);
+            Alert.alert("Error", "Your email may be wrong.");
+        }
+
     }
+
     const onSignInPressed = () => {
         navigation.navigate('SignIn');
     }
 
-  
+    const isButtonDisabled = !email;
    
 
 
@@ -25,12 +51,15 @@ const ForgotPasswordScreen = () => {
         <ScrollView contentContainerStyle={styles.root}>
             <Text style={styles.title}>Reset your password</Text>
             
-            <CustomInput placeholder="Username" value={username} setValue={setUsername} />
+            <CustomInput placeholder="Email" value={email} setValue={setEmail} autoCapitalize="none" />
            
+            <CustomButton 
+                text="Get code" 
+                onPress={onSendPressed} 
+                disabled={isButtonDisabled} // Pass the disabled state
+            />
 
-           
-            <CustomButton text="Send" onPress={onSendPressed} />
-            
+            {loginError ? <Text style={styles.errorMessage}>{loginError}</Text> : null}
            
             <CustomButton text="Back to sign in" onPress={onSignInPressed} type="TERTIARY" />
             

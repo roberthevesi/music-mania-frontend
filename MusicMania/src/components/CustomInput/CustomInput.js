@@ -1,16 +1,25 @@
 import React from 'react'
 import {View, Text, TextInput, StyleSheet } from 'react-native'
 
-const CustomInput = ({value, setValue, placeholder, secureTextEntry, autoCapitalize}) => {
+const CustomInput = ({value, setValue, placeholder, secureTextEntry, autoCapitalize, uppercase = false, maxLength}) => {
+    const handleTextChange = (text) => {
+        if (uppercase) {
+            setValue(text.toUpperCase());
+        } else {
+            setValue(text);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <TextInput
              value={value}
-             onChangeText={setValue}
+             onChangeText={handleTextChange}
              placeholder={placeholder} 
              style={styles.input}
              secureTextEntry= {secureTextEntry}
              autoCapitalize={autoCapitalize}
+             maxLength={maxLength}
              />
         </View>
     );

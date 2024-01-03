@@ -5,16 +5,50 @@ import CustomButton from '../../components/CustomButton/CustomButton';
 import { AntDesign } from '@expo/vector-icons'; 
 import { useNavigation } from '@react-navigation/native';
 
+import UserContext from '../../contexts/UserContext';
+import { useContext } from 'react';
+import axios from 'axios';
+import { Alert } from 'react-native';
+
 const SignUpScreen = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [passwordRepeat, setPasswordRepeat] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+
 
     const navigation = useNavigation();
 
-    const onRegisterPressed = () => {
-        navigation.navigate('ConfirmEmail');
+    const onRegisterPressed = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/api/users/send-new-user-code', {
+                username: username,
+                email: email,
+                password: password
+            });
+
+            // console.log(response.data);
+
+            navigation.navigate('ConfirmEmail', { email: email, username: username, password: password });
+
+
+        } catch (error) {
+            console.error('Error creating user: ', error);
+            // setLoginError('Your email may be wrong.');
+
+            let errorMessage = "Something went wrong. Please try again.";
+            
+            if (error.response && error.response.data) {
+                // If the error response contains a message, use it
+                errorMessage = error.response.data;
+            }
+
+            // Display the error message to the user
+            Alert.alert("Error", errorMessage);
+
+
+        }
+        // navigation.navigate('ConfirmEmail');
     }
 
     const onSignInPressed = () => {
@@ -29,25 +63,29 @@ const SignUpScreen = () => {
         console.warn("PrivacyPolicy");
     }
 
+    const isButtonDisabled = !email || !username || !password || !confirmPassword || (password !== confirmPassword);
+
+
 
     return (
         <ScrollView contentContainerStyle={styles.root}>
             <Text style={styles.title}>Create an account</Text>
-            
-            <CustomInput placeholder="Username" value={username} setValue={setUsername} />
-            <CustomInput placeholder="Email" value={username} setValue={setEmail} />
 
-            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} />
-            <CustomInput placeholder="Repeat Password" value={passwordRepeat} setValue={setPasswordRepeat} />
+            <CustomInput placeholder="Email" value={email} setValue={setEmail} autoCapitalize="none" />
 
-           
-            <CustomButton text="Register" onPress={onRegisterPressed} />
-            <Text style={styles.text}>
-                By registering, you confirm that you accept out <Text style={styles.link} onPress={onTermsOfUsePressed}>Terms of Use</Text> and <Text style={styles.link} onPress={onPrivacyPolicyPressed}>Privacy Policy</Text>.
-            </Text>
+            <CustomInput placeholder="Username" value={username} setValue={setUsername} autoCapitalize="none" />
+
+            <CustomInput placeholder="Password" value={password} setValue={setPassword} secureTextEntry={true} autoCapitalize="none" />
+
+            <CustomInput placeholder="Password" value={confirmPassword} setValue={setConfirmPassword} secureTextEntry={true} autoCapitalize="none" />
+
+            <CustomButton 
+                text="Register" 
+                onPress={onRegisterPressed} 
+                disabled={isButtonDisabled} // Pass the disabled state
+            />
             
-            <CustomButton text="Have an account? Sign in" onPress={onSignInPressed} type="TERTIARY" />
-            
+            <CustomButton text="Already have an account? Sign in" onPress={onSignInPressed} type="SECONDARY" />
         </ScrollView>
     );
 };

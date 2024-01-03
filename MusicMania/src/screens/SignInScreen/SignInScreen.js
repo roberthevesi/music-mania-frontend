@@ -9,9 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import UserContext from '../../contexts/UserContext';
 import base64 from 'react-native-base64';
+import { Alert } from 'react-native';
 
 const SignInScreen = () => {
-    const [loginError, setLoginError] = useState('');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -55,19 +55,20 @@ const SignInScreen = () => {
                 console.log('userData: ', updated_user_data);
 
                 navigation.navigate('Home');
-                setLoginError('');
+                
                 setEmail('');
                 setPassword('');
 
             } catch (error) {
                 console.error('Error fetching token: ', error);
-                setLoginError('An error occured. Please try again.');
+                Alert.alert("Error", "An error occured. Please try again.");
+
             }
 
             
         } catch (error) {
             console.error('Error fetching data: ', error);
-            setLoginError('Invalid Email or Password.');
+            Alert.alert("Error", "Wrong username/password.");
         }
     }
 
@@ -104,15 +105,9 @@ const SignInScreen = () => {
                 onPress={onSignInPressed} 
                 disabled={isButtonDisabled} // Pass the disabled state
             />
-
-            {loginError ? <Text style={styles.errorMessage}>{loginError}</Text> : null}
-
-
-            <View style={styles.forgotPasswordContainer}>
-                <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY" />
-            </View>
-            
-            <CustomButton text="Don't have an account? Create one" onPress={onSignUpPressed} type="TERTIARY" />
+            <CustomButton text="Don't have an account? Sign up here." onPress={onSignUpPressed} type="SECONDARY" />
+        
+            <CustomButton text="Forgot Password?" onPress={onForgotPasswordPressed} type="TERTIARY" />
             
         </ScrollView>
     );
