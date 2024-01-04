@@ -51,11 +51,11 @@ const ProfileScreen = ({ route }) => {
   };
 
   const onLeaderboardPressed = () => {
-    navigation.navigate('Learderboard');
+    navigation.navigate('Leaderboard');
   };
 
   const onProfilePressed = () => {
-    navigation.navigate('Profiel');
+    navigation.navigate('Profile');
   };
 
   const onHomePressed = () => {
