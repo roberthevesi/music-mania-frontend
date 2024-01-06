@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
+	Alert,
 	StyleSheet,
 	StatusBar,
 	Platform,
@@ -30,9 +31,28 @@ const ProfileScreen = ({ route }) => {
 	} = route.params ?? {};
 	const navigation = useNavigation();
 
-	const onLogOutPressed = () => {
-		setUserData(null);
+	const logoutUser = () => {
+		setUserData({});
 		navigation.navigate("SignIn");
+	};
+
+	const onLogOutPressed = () => {
+		Alert.alert(
+			"Logout", // Title of the alert
+			"Are you sure you want to logout?", // Message
+			[
+				{
+					text: "Cancel",
+					onPress: () => console.log("Cancel Pressed"),
+					style: "cancel",
+				},
+				{
+					text: "OK",
+					onPress: () => logoutUser(), // Replace with your function to delete the user
+				},
+			],
+			{ cancelable: false }
+		);
 	};
 
 	const onEditProfilePressed = () => {

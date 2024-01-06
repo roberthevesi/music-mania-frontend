@@ -138,7 +138,12 @@ const EditProfileScreen = () => {
 						<Feather name="arrow-left" size={24} color="white" />
 					</TouchableOpacity>
 				)}
-				<Text style={styles.headerTitle}>{title}</Text>
+
+				{title && (
+					<View style={styles.titleContainer}>
+						<Text style={styles.headerTitle}>{title}</Text>
+					</View>
+				)}
 			</View>
 		);
 	};

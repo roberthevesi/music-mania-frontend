@@ -90,61 +90,71 @@ const SignUpScreen = () => {
 						style={styles.backButton}
 						onPress={() => navigation.goBack()}
 					>
-						<Feather name="arrow-left" size={24} color="white" />
+						<Feather name="arrow-left" size={24} color="#051C60" />
 					</TouchableOpacity>
 				)}
-				<Text style={styles.headerTitle}>{title}</Text>
+
+				{title && (
+					<View style={styles.titleContainer}>
+						<Text style={styles.headerTitle}>{title}</Text>
+					</View>
+				)}
 			</View>
 		);
 	};
 
 	return (
-		<ScrollView contentContainerStyle={styles.root}>
+		<View style={styles.root}>
 			{/* <CustomHeader title="Create an account" showBackButton={true} /> */}
-			<Text style={styles.title}>Create an account</Text>
+			<CustomHeader title="Create an account" showBackButton={true} />
 
-			<CustomInput
-				placeholder="Email"
-				value={email}
-				setValue={setEmail}
-				autoCapitalize="none"
-			/>
+			{/* <Text style={styles.title}>Create an account</Text> */}
+			<ScrollView>
+				<View style={styles.contentContainer}>
+					<CustomInput
+						placeholder="Email"
+						value={email}
+						setValue={setEmail}
+						autoCapitalize="none"
+					/>
 
-			<CustomInput
-				placeholder="Username"
-				value={username}
-				setValue={setUsername}
-				autoCapitalize="none"
-			/>
+					<CustomInput
+						placeholder="Username"
+						value={username}
+						setValue={setUsername}
+						autoCapitalize="none"
+					/>
 
-			<CustomInput
-				placeholder="Password"
-				value={password}
-				setValue={setPassword}
-				secureTextEntry={true}
-				autoCapitalize="none"
-			/>
+					<CustomInput
+						placeholder="Password"
+						value={password}
+						setValue={setPassword}
+						secureTextEntry={true}
+						autoCapitalize="none"
+					/>
 
-			<CustomInput
-				placeholder="Password"
-				value={confirmPassword}
-				setValue={setConfirmPassword}
-				secureTextEntry={true}
-				autoCapitalize="none"
-			/>
+					<CustomInput
+						placeholder="Password"
+						value={confirmPassword}
+						setValue={setConfirmPassword}
+						secureTextEntry={true}
+						autoCapitalize="none"
+					/>
 
-			<CustomButton
-				text="Register"
-				onPress={onRegisterPressed}
-				disabled={isButtonDisabled} // Pass the disabled state
-			/>
+					<CustomButton
+						text="Register"
+						onPress={onRegisterPressed}
+						disabled={isButtonDisabled} // Pass the disabled state
+					/>
 
-			<CustomButton
-				text="Already have an account? Sign in"
-				onPress={onSignInPressed}
-				type="SECONDARY"
-			/>
-		</ScrollView>
+					<CustomButton
+						text="Already have an account? Sign in"
+						onPress={onSignInPressed}
+						type="SECONDARY"
+					/>
+				</View>
+			</ScrollView>
+		</View>
 	);
 };
 
@@ -152,26 +162,47 @@ const styles = StyleSheet.create({
 	headerContainer: {
 		flexDirection: "row",
 		alignItems: "center",
-		justifyContent: "center",
+		justifyContent: "flex-start",
 		paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
 		paddingBottom: 10,
+		width: "100%",
+		marginTop: 60,
+		marginBottom: 160,
 	},
 	backButton: {
+		paddingLeft: 10,
+		zIndex: 1,
+		alignItems: "center",
+		marginTop: 0,
+	},
+	titleContainer: {
 		position: "absolute",
-		left: 10,
+		width: "100%",
+		alignItems: "center",
+		justifyContent: "center",
+		zIndex: 0,
+		marginTop: 0,
 	},
 	headerTitle: {
-		fontSize: 20,
+		marginTop: -3,
+		fontSize: 21,
 		fontWeight: "bold",
-		color: "white",
+		color: "#051C60",
+		alignItems: "center",
 	},
 
 	root: {
 		flex: 1,
-		justifyContent: "center",
-		alignItems: "center",
+		// justifyContent: "center",
+		// alignItems: "center",
 		paddingTop: 1,
 		backgroundColor: "lavender",
+	},
+
+	contentContainer: {
+		justifyContent: "center",
+		alignItems: "center",
+		padding: 1,
 	},
 
 	title: {

@@ -30,7 +30,7 @@ const SignInScreen = () => {
 	const onSignInPressed = async () => {
 		try {
 			const response = await axios.get(
-				"https://localhost:8080/api/users/get-user",
+				"http://localhost:8080/api/users/get-user",
 				{
 					params: {
 						email: email,
@@ -50,7 +50,7 @@ const SignInScreen = () => {
 				// (which we have in response)
 
 				const token_response = await axios.get(
-					"https://localhost:8080/api/users/get-token",
+					"http://localhost:8080/api/users/get-token",
 					{
 						headers: {
 							Authorization: authHeader,
@@ -70,7 +70,6 @@ const SignInScreen = () => {
 				console.log("userData: ", updated_user_data);
 
 				navigation.navigate("Home");
-
 				setEmail("");
 				setPassword("");
 			} catch (error) {
