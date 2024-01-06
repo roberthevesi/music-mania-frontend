@@ -46,11 +46,6 @@ const Home = () => {
     navigation.navigate('GuessTheSong');
   };
 
-  const onGuessTheAlbumPressed = () => {
-    
-    navigation.navigate('GuessTheAlbum');
-  };
-
   return (
     <LinearGradient colors={['#673AB7', '#001F3F']} style={styles.container}>
       {showGames ? (
@@ -59,11 +54,6 @@ const Home = () => {
           <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
             <Image source={Logo_2} style={styles.logo} resizeMode="contain" />
             <Text style={styles.gameOptionText}>GUESS THE SONG</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.gameOption} onPress={onGuessTheAlbumPressed}>
-            <Image source={Logo} style={styles.logo} resizeMode="contain" />
-            <Text style={styles.gameOptionText}>GUESS THE ALBUM</Text>
           </TouchableOpacity>
         </View>
       ) : (
