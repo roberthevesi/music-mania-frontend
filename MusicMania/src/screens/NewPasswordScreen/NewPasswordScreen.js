@@ -22,11 +22,15 @@ const NewPasswordScreen = () => {
 
     const onSubmitPressed = async () => {
         try{
-            const code_response = await axios.put(`http://localhost:8080/api/users/verify-forgot-password-code?email=${encodeURIComponent(received_email)}&verification_code=${encodeURIComponent(code)}`);
+            const code_response = await axios.delete(`http://localhost:8080/api/users/delete-user`, {
+                params: {
+                    userId: userData.id
+                }
+            });
 
             console.log('resp: ', code_response.data)
 
-            if(code_response.data) {
+            if(code_response.data) { // code is ok
                 const password_response = await axios.put(`http://localhost:8080/api/users/set-new-password?email=${encodeURIComponent(received_email)}&password=${encodeURIComponent(newPassword)}`);
 
                 console.log('resp: ', password_response.data)
