@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { View, TouchableOpacity, Text, Image, StyleSheet, Animated, Easing } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
@@ -24,7 +22,6 @@ const Home = () => {
       easing: Easing.linear,
       useNativeDriver: true,
     }).start(() => {
-      
       setShowGames(true);
     });
   };
@@ -48,8 +45,11 @@ const Home = () => {
 
   return (
     <LinearGradient colors={['#673AB7', '#001F3F']} style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Text style={styles.headerText}>Welcome to Music Mania!</Text>
+      </View>
+
       {showGames ? (
-        
         <View style={styles.centeredContent}>
           <TouchableOpacity style={styles.gameOption} onPress={onGuessTheSongPressed}>
             <Image source={Logo_2} style={styles.logo} resizeMode="contain" />
@@ -57,30 +57,29 @@ const Home = () => {
           </TouchableOpacity>
         </View>
       ) : (
-        
         <Animated.View style={[styles.centeredContent, { opacity: fadeAnimation }]}>
           <Text style={[styles.boldText, styles.musicManiaText]}> MUSIC MANIA</Text>
         </Animated.View>
       )}
 
-<View style={styles.bottomIconsContainer}>
-          <View style={styles.bottomIcons}>
-            <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
-              <MaterialCommunityIcons name="home" size={30} color="white" />
-              <Text style={styles.iconText}>Home</Text>
-            </TouchableOpacity>
+      <View style={styles.bottomIconsContainer}>
+        <View style={styles.bottomIcons}>
+          <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Home')}>
+            <MaterialCommunityIcons name="home" size={30} color="white" />
+            <Text style={styles.iconText}>Home</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
-              <MaterialCommunityIcons name="trophy" size={30} color="white" />
-              <Text style={styles.iconText}>Leaderboard</Text>
-            </TouchableOpacity>
+          <TouchableOpacity style={styles.iconButton} onPress={onLeaderboardPressed}>
+            <MaterialCommunityIcons name="trophy" size={30} color="white" />
+            <Text style={styles.iconText}>Leaderboard</Text>
+          </TouchableOpacity>
 
-            <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
-              <MaterialCommunityIcons name="account" size={30} color="white" />
-              <Text style={styles.iconText}>Profile</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity style={styles.iconButton} onPress={onProfilePressed}>
+            <MaterialCommunityIcons name="account" size={30} color="white" />
+            <Text style={styles.iconText}>Profile</Text>
+          </TouchableOpacity>
         </View>
+      </View>
     </LinearGradient>
   );
 };
@@ -90,6 +89,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     paddingTop: 50,
+  },
+  headerContainer: {
+    alignItems: 'center',
+    marginTop: 40,
+  },
+  headerText: {
+    fontSize: 30,
+    color: '#FFFF',
+    fontWeight: 'bold',
+    textShadowColor: 'black',
+    textShadowOffset: { width: 5, height: 5 },
+    textShadowRadius: 5,
   },
   centeredContent: {
     flex: 1,
@@ -117,13 +128,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   logo: {
-    width: 250,
-    height: 250,
+    width: 450,
+    height: 450,
     borderRadius: 10,
     marginBottom: 15,
-    borderWidth: 0, 
-    borderColor: '#FFFFFF', 
-
+    borderWidth: 0,
+    borderColor: '#FFFFFF',
   },
   gameOptionText: {
     fontSize: 20,
@@ -131,16 +141,17 @@ const styles = StyleSheet.create({
     color: '#FFFF',
     marginTop: 5,
     fontWeight: '300',
-    textShadowColor: 'black',
+    textShadowColor: '#673AB7',
     textShadowOffset: { width: 5, height: 5 },
     textShadowRadius: 5,
- 
-  },
+    backgroundColor: 'black',
+    
+    },
   bottomIconsContainer: {
     width: '100%',
     height: 80,
-    backgroundColor: '#673AB7', 
-    paddingBottom: 35, 
+    backgroundColor: '#673AB7',
+    paddingBottom: 35,
   },
   bottomIcons: {
     flexDirection: 'row',
@@ -148,9 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     bottom: 0,
     width: '100%',
-    
   },
-
   iconButton: {
     marginTop: 10,
     alignItems: 'center',
