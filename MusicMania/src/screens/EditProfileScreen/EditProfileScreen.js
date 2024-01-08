@@ -21,43 +21,18 @@ import UserContext from "../../contexts/UserContext";
 import { useContext } from "react";
 import axios from "axios";
 
+import ChangePasswordModal from "../../components/ChangePasswordModal";
+
 const EditProfileScreen = () => {
 	const navigation = useNavigation();
 
 	const { userData, setUserData } = useContext(UserContext);
 
-	const [newProfilePicture, setNewProfilePicture] = useState(null);
-	const [isLoading, setIsLoading] = useState(false);
 	const [isChangePasswordModalVisible, setChangePasswordModalVisible] =
 		useState(false);
-	const [currentPassword, setCurrentPassword] = useState("");
-	const [newPassword, setNewPassword] = useState("");
-
-	const handleSave = async () => {
-		setIsLoading(true);
-		try {
-			await new Promise((resolve) => setTimeout(resolve, 2000));
-			Alert.alert("Success", "Profile updated successfully");
-			navigation.goBack();
-		} catch (error) {
-			console.error("Error updating profile:", error);
-			Alert.alert("Error", "Failed to update profile. Please try again.");
-		} finally {
-			setIsLoading(false);
-		}
-	};
 
 	const handleChangeProfilePicture = () => {
 		// Implement logic to change profile picture, Open gallery or camera, set the new profile picture using setNewProfilePicture
-	};
-
-	const handleChangePassword = () => {
-		setChangePasswordModalVisible(true);
-	};
-
-	const handleSavePassword = () => {
-		// Implement logic to handle the password change based on currentPassword and newPassword, close the modal when done
-		setChangePasswordModalVisible(false);
 	};
 
 	const alertEnd = () => {
@@ -148,6 +123,65 @@ const EditProfileScreen = () => {
 		);
 	};
 
+	// Method to handle password change
+	const handleChangePassword = async (oldPassword, newPassword) => {
+		try {
+			console.log("token:", userData.token);
+			console.log("id:", userData.id);
+			console.log("old pass:", oldPassword);
+			console.log("new pass:", newPassword);
+
+			const response = await axios.put(
+				"http://localhost:8080/api/users/change-user-password",
+				null, // No body content for the PUT request
+				{
+					params: {
+						userId: userData.id,
+						oldPassword: oldPassword,
+						newPassword: newPassword,
+					},
+					headers: {
+						Authorization: `Bearer ${userData.token}`,
+					},
+				}
+			);
+
+			Alert.alert(
+				"Success", // Title of the alert
+				"Your password has been successfully changed.", // Message
+				[
+					{
+						text: "OK",
+						onPress: () => setChangePasswordModalVisible(false),
+					},
+				],
+				{ cancelable: false } // This prevents dismissing the alert by tapping outside of it
+			);
+
+			console.log("New password:", newPassword);
+		} catch (error) {
+			console.error("Error changing password: ", error);
+
+			Alert.alert(
+				"Error", // Title of the alert
+				"Something went wrong, please try again.", // Message
+				[
+					{
+						text: "OK",
+						onPress: () => setChangePasswordModalVisible(false), // Navigate on pressing OK
+					},
+				],
+				{ cancelable: false } // This prevents dismissing the alert by tapping outside of it
+			);
+		}
+
+		// Add your API call or logic here
+	};
+
+	const handleChangePasswordPress = () => {
+		setChangePasswordModalVisible(true);
+	};
+
 	// { position: "absolute", top: 60, left: 15, zIndex: 1 }
 	return (
 		<View style={{ flex: 1 }}>
@@ -181,7 +215,7 @@ const EditProfileScreen = () => {
 
 				<TouchableOpacity
 					style={styles.changeButton}
-					onPress={handleChangePassword}
+					onPress={handleChangePasswordPress}
 				>
 					<Feather
 						name="lock"
@@ -191,6 +225,12 @@ const EditProfileScreen = () => {
 					/>
 					<Text style={styles.buttonText}>Change Password</Text>
 				</TouchableOpacity>
+
+				<ChangePasswordModal
+					isVisible={isChangePasswordModalVisible}
+					onClose={() => setChangePasswordModalVisible(false)}
+					onChangePassword={handleChangePassword}
+				/>
 
 				<TouchableOpacity
 					style={styles.deleteButton}
@@ -204,53 +244,28 @@ const EditProfileScreen = () => {
 					/>
 					<Text style={styles.buttonText}>Delete Account</Text>
 				</TouchableOpacity>
-
-				<Modal
-					isVisible={isChangePasswordModalVisible}
-					onBackdropPress={() => setChangePasswordModalVisible(false)}
-				>
-					<View style={styles.modalContainer}>
-						<Text style={styles.modalTitle}>Change Password</Text>
-						<TextInput
-							style={styles.input}
-							placeholder="Current Password"
-							secureTextEntry
-							value={currentPassword}
-							onChangeText={setCurrentPassword}
-						/>
-						<TextInput
-							style={styles.input}
-							placeholder="New Password"
-							secureTextEntry
-							value={newPassword}
-							onChangeText={setNewPassword}
-						/>
-
-						{/* Buttons Container */}
-						<View style={styles.modalButtonsContainer}>
-							<TouchableOpacity
-								style={styles.cancelModalButton}
-								onPress={() =>
-									setChangePasswordModalVisible(false)
-								}
-							>
-								<Text style={styles.buttonText}>Cancel</Text>
-							</TouchableOpacity>
-
-							<TouchableOpacity
-								style={styles.saveModalButton}
-								onPress={handleSavePassword}
-							>
-								<Text style={styles.buttonText}>
-									Save Changes
-								</Text>
-							</TouchableOpacity>
-						</View>
-					</View>
-				</Modal>
 			</LinearGradient>
 		</View>
 	);
+
+	// return (
+	// 	<View style={styles.container}>
+	// 		{/* ... other UI components ... */}
+
+	// 		{/* Button to trigger change password modal */}
+	// 		<Button
+	// 			title="Change Password"
+	// 			onPress={handleChangePasswordPress}
+	// 		/>
+
+	// 		{/* ChangePasswordModal component */}
+	// 		<ChangePasswordModal
+	// 			isVisible={isChangePasswordModalVisible}
+	// 			onClose={() => setChangePasswordModalVisible(false)}
+	// 			onChangePassword={handleChangePassword}
+	// 		/>
+	// 	</View>
+	// );
 };
 
 const styles = StyleSheet.create({
@@ -373,6 +388,58 @@ const styles = StyleSheet.create({
 		padding: 10,
 		alignItems: "center",
 		borderRadius: 5,
+	},
+	centeredView: {
+		flex: 1,
+		justifyContent: "center",
+		alignItems: "center",
+		marginTop: 22,
+	},
+	modalView: {
+		margin: 20,
+		backgroundColor: "white",
+		borderRadius: 20,
+		padding: 35,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 4,
+		elevation: 5,
+	},
+	input: {
+		width: 200,
+		height: 40,
+		margin: 12,
+		borderWidth: 1,
+		padding: 10,
+		borderRadius: 10,
+	},
+	buttonContainer: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		width: "100%",
+		marginTop: 20,
+	},
+	button: {
+		borderRadius: 20,
+		padding: 10,
+		elevation: 2,
+		width: "40%",
+	},
+	buttonCancel: {
+		backgroundColor: "#f44336",
+	},
+	buttonConfirm: {
+		backgroundColor: "#4CAF50",
+	},
+	textStyle: {
+		color: "white",
+		fontWeight: "bold",
+		textAlign: "center",
 	},
 });
 

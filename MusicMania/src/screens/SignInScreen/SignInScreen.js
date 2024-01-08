@@ -60,8 +60,6 @@ const SignInScreen = () => {
 
 				const updated_user_data = {
 					...obtained_data,
-					profilePictureURL:
-						"https://music-mania-s3-bucket.s3.eu-west-3.amazonaws.com/users/profile-pictures/generic-user.jpg",
 					token: token_response.data,
 				};
 
