@@ -24,11 +24,6 @@ import Logo_2 from "../../../assets/images/song.png";
 const ProfileScreen = ({ route }) => {
 	const { userData, setUserData } = useContext(UserContext);
 
-	const {
-		username = "Guest",
-		profilePicture,
-		totalScore,
-	} = route.params ?? {};
 	const navigation = useNavigation();
 
 	const logoutUser = () => {
@@ -56,20 +51,10 @@ const ProfileScreen = ({ route }) => {
 	};
 
 	const onEditProfilePressed = () => {
-		const userData = {
-			username: "JohnDoe",
-			profilePicture: "https://source.unsplash.com/200x200/?portrait",
-			totalScore: 500,
-		};
-
 		navigation.navigate("EditProfile");
 	};
 	const onGuessTheSongPressed = () => {
 		navigation.navigate("GuessTheSong");
-	};
-
-	const onGuessTheAlbumPressed = () => {
-		navigation.navigate("GuessTheAlbum");
 	};
 
 	const onLeaderboardPressed = () => {
@@ -77,7 +62,7 @@ const ProfileScreen = ({ route }) => {
 	};
 
 	const onProfilePressed = () => {
-		navigation.navigate("Profile");
+		// navigation.navigate("Profile");
 	};
 
 	const onHomePressed = () => {
@@ -110,12 +95,10 @@ const ProfileScreen = ({ route }) => {
 			>
 				<CustomHeader title="Profile" showBackButton={false} />
 				<View style={styles.userInfo}>
-					{profilePicture && (
-						<Image
-							source={{ uri: userData.profilePictureURL }}
-							style={styles.profilePicture}
-						/>
-					)}
+					<Image
+						source={{ uri: userData.profilePictureURL }}
+						style={styles.profilePicture}
+					/>
 
 					<Text style={styles.username}>{userData.username}</Text>
 

@@ -213,10 +213,10 @@ const EditProfileScreen = () => {
 
 			closeModal();
 
-			setUserData({
-				...userData,
-				profilePictureURL: response.data.profilePictureURL,
-			});
+			// setUserData({
+			// 	...userData,
+			// 	profilePictureURL: response.data.profilePictureURL,
+			// });
 
 			setImageKey((prevKey) => prevKey + 1);
 
