@@ -22,18 +22,16 @@ import { useContext } from "react";
 import axios from "axios";
 
 import ChangePasswordModal from "../../components/ChangePasswordModal";
+import ChangeProfilePictureModal from "../../components/ChangeProfilePictureModal";
 
 const EditProfileScreen = () => {
 	const navigation = useNavigation();
 
 	const { userData, setUserData } = useContext(UserContext);
+	const [imageKey, setImageKey] = useState(0);
 
 	const [isChangePasswordModalVisible, setChangePasswordModalVisible] =
 		useState(false);
-
-	const handleChangeProfilePicture = () => {
-		// Implement logic to change profile picture, Open gallery or camera, set the new profile picture using setNewProfilePicture
-	};
 
 	const alertEnd = () => {
 		navigation.navigate("SignIn");
@@ -182,7 +180,67 @@ const EditProfileScreen = () => {
 		setChangePasswordModalVisible(true);
 	};
 
-	// { position: "absolute", top: 60, left: 15, zIndex: 1 }
+	const [
+		isChangeProfilePictureModalVisible,
+		setIsChangeProfilePictureModalVisible,
+	] = useState(false);
+
+	const handleImageSelected = async (imageUri) => {
+		console.log("image URI:", imageUri);
+
+		try {
+			const formData = new FormData();
+
+			formData.append("file", {
+				uri: imageUri,
+				type: "image/jpeg", // Adjust based on your image format
+				name: "picture.jpg", // Adjust the file name as needed
+			});
+
+			// Append userId as a string
+			formData.append("userId", userData.id.toString());
+
+			const response = await axios.put(
+				"http://localhost:8080/api/users/update-user-profile-picture",
+				formData,
+				{
+					headers: {
+						Authorization: `Bearer ${userData.token}`,
+						// Axios will automatically set the correct Content-Type for FormData
+					},
+				}
+			);
+
+			closeModal();
+
+			setUserData({
+				...userData,
+				profilePictureURL: response.data.profilePictureURL,
+			});
+
+			setImageKey((prevKey) => prevKey + 1);
+
+			console.log("Response:", response.data);
+		} catch (error) {
+			Alert.alert(
+				"Error", // Title of the alert
+				"Something went wrong, please try again.", // Message
+				[
+					{
+						text: "OK",
+						onPress: () => closeModal(), // Navigate on pressing OK
+					},
+				],
+				{ cancelable: false } // This prevents dismissing the alert by tapping outside of it
+			);
+		}
+	};
+
+	const openModal = () => setIsChangeProfilePictureModalVisible(true);
+	const closeModal = () => {
+		setIsChangeProfilePictureModalVisible(false);
+	};
+
 	return (
 		<View style={{ flex: 1 }}>
 			<LinearGradient
@@ -192,7 +250,9 @@ const EditProfileScreen = () => {
 				<CustomHeader title="Edit Profile" showBackButton={true} />
 				<View style={styles.userInfo}>
 					<Image
-						source={{ uri: userData.profilePictureURL }}
+						source={{
+							uri: `${userData.profilePictureURL}?key=${imageKey}`,
+						}}
 						style={styles.profilePicture}
 					/>
 					<Text style={styles.username}>{userData.username}</Text>
@@ -200,7 +260,7 @@ const EditProfileScreen = () => {
 
 				<TouchableOpacity
 					style={styles.changeButton}
-					onPress={handleChangeProfilePicture}
+					onPress={openModal}
 				>
 					<Feather
 						name="camera"
@@ -212,6 +272,12 @@ const EditProfileScreen = () => {
 						Change Profile Picture
 					</Text>
 				</TouchableOpacity>
+
+				<ChangeProfilePictureModal
+					isVisible={isChangeProfilePictureModalVisible}
+					onClose={closeModal}
+					onImageSelected={handleImageSelected}
+				/>
 
 				<TouchableOpacity
 					style={styles.changeButton}
@@ -247,28 +313,15 @@ const EditProfileScreen = () => {
 			</LinearGradient>
 		</View>
 	);
-
-	// return (
-	// 	<View style={styles.container}>
-	// 		{/* ... other UI components ... */}
-
-	// 		{/* Button to trigger change password modal */}
-	// 		<Button
-	// 			title="Change Password"
-	// 			onPress={handleChangePasswordPress}
-	// 		/>
-
-	// 		{/* ChangePasswordModal component */}
-	// 		<ChangePasswordModal
-	// 			isVisible={isChangePasswordModalVisible}
-	// 			onClose={() => setChangePasswordModalVisible(false)}
-	// 			onChangePassword={handleChangePassword}
-	// 		/>
-	// 	</View>
-	// );
 };
 
 const styles = StyleSheet.create({
+	imageBox: {
+		width: 200,
+		height: 200,
+		marginTop: 20,
+		borderRadius: 10, // Optional for rounded corners
+	},
 	headerContainer: {
 		flexDirection: "row",
 		alignItems: "center",

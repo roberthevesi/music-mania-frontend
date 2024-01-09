@@ -30,6 +30,12 @@ const ChangePasswordModal = ({ isVisible, onClose, onChangePassword }) => {
 		setConfirmNewPassword("");
 	};
 
+	const isButtonDisabled =
+		!oldPassword ||
+		!newPassword ||
+		!confirmNewPassword ||
+		newPassword !== confirmNewPassword;
+
 	return (
 		<Modal
 			animationType="fade"
@@ -69,8 +75,13 @@ const ChangePasswordModal = ({ isVisible, onClose, onChangePassword }) => {
 							<Text style={styles.textStyle}>Cancel</Text>
 						</TouchableOpacity>
 						<TouchableOpacity
-							style={[styles.button, styles.buttonConfirm]}
+							style={[
+								styles.button,
+								styles.buttonConfirm,
+								isButtonDisabled && styles.buttonDisabled,
+							]}
 							onPress={handleConfirm}
+							disabled={isButtonDisabled}
 						>
 							<Text style={styles.textStyle}>Confirm</Text>
 						</TouchableOpacity>
@@ -82,6 +93,9 @@ const ChangePasswordModal = ({ isVisible, onClose, onChangePassword }) => {
 };
 
 const styles = StyleSheet.create({
+	buttonDisabled: {
+		backgroundColor: "#cccccc", // Grey color for disabled button
+	},
 	modalTitle: {
 		fontSize: 19,
 		fontWeight: "bold",
