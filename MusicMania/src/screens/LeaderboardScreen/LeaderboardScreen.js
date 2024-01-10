@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
 	View,
 	Text,
@@ -8,12 +8,18 @@ import {
 	Platform,
 	ScrollView,
 	Image,
+	Alert,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import axios from "axios";
+import UserContext from "../../contexts/UserContext";
+import { useContext } from "react";
 
 const LeaderboardScreen = () => {
+	const { userData, setUserData } = useContext(UserContext);
+
 	const navigation = useNavigation();
 
 	const onHomePressed = () => {
@@ -28,71 +34,120 @@ const LeaderboardScreen = () => {
 		navigation.navigate("Profile");
 	};
 
-	const topPlayers = [
-		{
-			rank: 1,
-			username: "Player1",
-			medal: "🥇",
-			totalScore: 1200,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 2,
-			username: "Player2",
-			medal: "🥈",
-			totalScore: 1000,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 3,
-			username: "Player3",
-			medal: "🥉",
-			totalScore: 800,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 4,
-			username: "Player4",
-			totalScore: 750,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 5,
-			username: "Player5",
-			totalScore: 720,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 6,
-			username: "Player6",
-			totalScore: 690,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 7,
-			username: "Player7",
-			totalScore: 660,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 8,
-			username: "Player8",
-			totalScore: 630,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 9,
-			username: "Player9",
-			totalScore: 600,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-		{
-			rank: 10,
-			username: "Player10",
-			totalScore: 580,
-			image: "https://source.unsplash.com/200x200/?portrait",
-		},
-	];
+	const [topPlayers, setTopPlayers] = useState([]);
+
+	useEffect(() => {
+		const fetchTopPlayers = async () => {
+			const fetchedPlayers = await getTop10Users();
+			if (fetchedPlayers) {
+				setTopPlayers(
+					fetchedPlayers.map((player, index) => ({
+						...player,
+						rank: index + 1,
+						medal:
+							index === 0
+								? "🥇"
+								: index === 1
+								? "🥈"
+								: index === 2
+								? "🥉"
+								: null,
+						totalScore: player.score,
+						image: player.profilePictureURL,
+					}))
+				);
+			}
+		};
+
+		fetchTopPlayers();
+	}, []);
+
+	const getTop10Users = async () => {
+		try {
+			const response = await axios.get(
+				"http://localhost:8080/api/users/get-top10-users",
+				{
+					headers: {
+						Authorization: `Bearer ${userData.token}`,
+					},
+				}
+			);
+
+			console.log("Response:", response.data);
+			return response.data;
+		} catch (error) {
+			console.error("Error Details:", error.response || error);
+			// Existing alert logic...
+		}
+	};
+
+	// const topPlayers = [
+	// 	{
+	// 		rank: 1,
+	// 		username: "Player1",
+	// 		medal: "🥇",
+	// 		totalScore: 1200,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 2,
+	// 		username: "Player2",
+	// 		medal: "🥈",
+	// 		totalScore: 1000,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 3,
+	// 		username: "Player3",
+	// 		medal: "🥉",
+	// 		totalScore: 800,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 4,
+	// 		username: "Player4",
+	// 		totalScore: 750,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 5,
+	// 		username: "Player5",
+	// 		totalScore: 720,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 6,
+	// 		username: "Player6",
+	// 		totalScore: 690,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 7,
+	// 		username: "Player7",
+	// 		totalScore: 660,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 8,
+	// 		username: "Player8",
+	// 		totalScore: 630,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 9,
+	// 		username: "Player9",
+	// 		totalScore: 600,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// 	{
+	// 		rank: 10,
+	// 		username: "Player10",
+	// 		totalScore: 580,
+	// 		image: "https://source.unsplash.com/200x200/?portrait",
+	// 	},
+	// ];
+
+	// const topPlayers = getTop10Users();
 
 	return (
 		<View style={styles.container}>
