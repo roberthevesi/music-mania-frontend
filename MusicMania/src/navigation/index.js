@@ -9,9 +9,9 @@ import NewPasswordScreen from '../screens/NewPasswordScreen';
 import HomeScreen from '../screens/HomeScreen';
 import LeaderboardScreen from '../screens/LeaderboardScreen';
 import ProfileScreen from '../screens/ProfileScreen';
-import GuessTheAlbumScreen from '../screens/GuessTheAlbumScreen';
+//import GuessTheAlbumScreen from '../screens/GuessTheAlbumScreen';
 import GuessTheSongScreen from '../screens/GuessTheSongScreen';
-import SettingsScreen from '../screens/SettingsScreen';
+//import SettingsScreen from '../screens/SettingsScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Stack = createNativeStackNavigator();
@@ -20,7 +20,7 @@ const Stack = createNativeStackNavigator();
 const Navigation = () => {
     return(
         <NavigationContainer>
-            <Stack.Navigator screenOptions={{headerShown: false}}>
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
                 <Stack.Screen name="SignIn" component={SignInScreen}/>
                 <Stack.Screen name="SignUp" component={SignUpScreen}/>
                 <Stack.Screen name="ConfirmEmail" component={ConfirmEmailScreen}/>
@@ -29,9 +29,9 @@ const Navigation = () => {
                 <Stack.Screen name="NewPassword" component={NewPasswordScreen}/>
                 <Stack.Screen name="Leaderboard" component={LeaderboardScreen}/>
                 <Stack.Screen name="Profile" component={ProfileScreen}/>
-                <Stack.Screen name="GuessTheAlbum" component={GuessTheAlbumScreen}/>
+                {/* <Stack.Screen name="GuessTheAlbum" component={GuessTheAlbumScreen}/> */}
                 <Stack.Screen name="GuessTheSong" component={GuessTheSongScreen}/>
-                <Stack.Screen name="Settings" component={SettingsScreen}/>
+                {/* //<Stack.Screen name="Settings" component={SettingsScreen}/> */}
                 <Stack.Screen name="EditProfile" component={EditProfileScreen}/>
 
 
