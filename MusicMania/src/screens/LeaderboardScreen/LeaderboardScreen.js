@@ -53,49 +53,42 @@ const LeaderboardScreen = () => {
 		{
 			rank: 4,
 			username: "Player4",
-			medal: "🏅",
 			totalScore: 750,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 5,
 			username: "Player5",
-			medal: "🏅",
 			totalScore: 720,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 6,
 			username: "Player6",
-			medal: "🏅",
 			totalScore: 690,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 7,
 			username: "Player7",
-			medal: "🏅",
 			totalScore: 660,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 8,
 			username: "Player8",
-			medal: "🏅",
 			totalScore: 630,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 9,
 			username: "Player9",
-			medal: "🏅",
 			totalScore: 600,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
 		{
 			rank: 10,
 			username: "Player10",
-			medal: "🏅",
 			totalScore: 580,
 			image: "https://source.unsplash.com/200x200/?portrait",
 		},
@@ -115,7 +108,10 @@ const LeaderboardScreen = () => {
 						{topPlayers.map((player) => (
 							<View
 								key={player.rank}
-								style={styles.topPlayerItem}
+								style={[
+									styles.topPlayerItem,
+									player.rank <= 3 ? styles.top3Player : null,
+								]}
 							>
 								<View style={styles.medalContainer}>
 									<Text
@@ -126,7 +122,9 @@ const LeaderboardScreen = () => {
 												: null,
 										]}
 									>
-										{player.medal}
+										{player.rank <= 3
+											? player.medal
+											: `${player.rank}.`}
 									</Text>
 								</View>
 								{player.image && (
@@ -143,7 +141,14 @@ const LeaderboardScreen = () => {
 									</TouchableOpacity>
 								)}
 								<View style={styles.userInfo}>
-									<Text style={styles.username}>
+									<Text
+										style={[
+											styles.username,
+											player.rank <= 3
+												? styles.bigUsername
+												: null,
+										]}
+									>
 										{player.username}
 									</Text>
 									<Text style={styles.totalScore}>
@@ -227,6 +232,11 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		marginBottom: 10,
 	},
+	top3Player: {
+		backgroundColor: "rgba(255,255,255,0.2)",
+		borderRadius: 10,
+		padding: 10,
+	},
 	medal: {
 		fontSize: 20,
 		marginRight: 10,
@@ -241,11 +251,19 @@ const styles = StyleSheet.create({
 		fontSize: 45,
 		fontWeight: "bold",
 	},
-
 	username: {
 		color: "white",
 		fontSize: 20,
 		marginBottom: 15,
+	},
+	bigUsername: {
+		fontSize: 25,
+		color: "white",
+		marginBottom: 15,
+	},
+	totalScore: {
+		color: "white",
+		fontSize: 16,
 	},
 	bottomIconsContainer: {
 		flexDirection: "column",

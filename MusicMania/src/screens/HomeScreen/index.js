@@ -51,6 +51,10 @@ const Home = () => {
 			colors={["#673AB7", "#001F3F"]}
 			style={styles.container}
 		>
+			<View style={styles.headerContainer}>
+				<Text style={styles.headerText}>Welcome to Music Mania!</Text>
+			</View>
+
 			{showGames ? (
 				<View style={styles.centeredContent}>
 					<TouchableOpacity
@@ -127,6 +131,18 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		paddingTop: 50,
 	},
+	headerContainer: {
+		alignItems: "center",
+		marginTop: 40,
+	},
+	headerText: {
+		fontSize: 30,
+		color: "#FFFF",
+		fontWeight: "bold",
+		textShadowColor: "black",
+		textShadowOffset: { width: 5, height: 5 },
+		textShadowRadius: 5,
+	},
 	centeredContent: {
 		flex: 1,
 		justifyContent: "center",
@@ -153,8 +169,8 @@ const styles = StyleSheet.create({
 		marginBottom: 5,
 	},
 	logo: {
-		width: 250,
-		height: 250,
+		width: 450,
+		height: 450,
 		borderRadius: 10,
 		marginBottom: 15,
 		borderWidth: 0,
@@ -166,9 +182,10 @@ const styles = StyleSheet.create({
 		color: "#FFFF",
 		marginTop: 5,
 		fontWeight: "300",
-		textShadowColor: "black",
+		textShadowColor: "#673AB7",
 		textShadowOffset: { width: 5, height: 5 },
 		textShadowRadius: 5,
+		backgroundColor: "black",
 	},
 	bottomIconsContainer: {
 		width: "100%",
@@ -183,7 +200,6 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: "100%",
 	},
-
 	iconButton: {
 		marginTop: 10,
 		alignItems: "center",

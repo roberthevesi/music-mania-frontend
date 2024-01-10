@@ -9,7 +9,9 @@ import NewPasswordScreen from "../screens/NewPasswordScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LeaderboardScreen from "../screens/LeaderboardScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+//import GuessTheAlbumScreen from '../screens/GuessTheAlbumScreen';
 import GuessTheSongScreen from "../screens/GuessTheSongScreen";
+//import SettingsScreen from '../screens/SettingsScreen';
 import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
