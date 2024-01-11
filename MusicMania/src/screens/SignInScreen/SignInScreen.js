@@ -30,7 +30,7 @@ const SignInScreen = () => {
 	const onSignInPressed = async () => {
 		try {
 			const response = await axios.get(
-				"https://localhost:8080/api/users/get-user",
+				"http://localhost:8080/api/users/get-user",
 				{
 					params: {
 						email: email,
@@ -50,7 +50,7 @@ const SignInScreen = () => {
 				// (which we have in response)
 
 				const token_response = await axios.get(
-					"https://localhost:8080/api/users/get-token",
+					"http://localhost:8080/api/users/get-token",
 					{
 						headers: {
 							Authorization: authHeader,
@@ -60,8 +60,6 @@ const SignInScreen = () => {
 
 				const updated_user_data = {
 					...obtained_data,
-					profilePictureURL:
-						"https://music-mania-s3-bucket.s3.eu-west-3.amazonaws.com/users/profile-pictures/generic-user.jpg",
 					token: token_response.data,
 				};
 
@@ -70,7 +68,6 @@ const SignInScreen = () => {
 				console.log("userData: ", updated_user_data);
 
 				navigation.navigate("Home");
-
 				setEmail("");
 				setPassword("");
 			} catch (error) {

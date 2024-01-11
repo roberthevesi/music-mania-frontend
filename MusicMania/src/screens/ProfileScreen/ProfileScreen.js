@@ -5,6 +5,7 @@ import {
 	Text,
 	TouchableOpacity,
 	Image,
+	Alert,
 	StyleSheet,
 	StatusBar,
 	Platform,
@@ -23,33 +24,37 @@ import Logo_2 from "../../../assets/images/song.png";
 const ProfileScreen = ({ route }) => {
 	const { userData, setUserData } = useContext(UserContext);
 
-	const {
-		username = "Guest",
-		profilePicture,
-		totalScore,
-	} = route.params ?? {};
 	const navigation = useNavigation();
 
-	const onLogOutPressed = () => {
-		setUserData(null);
+	const logoutUser = () => {
+		setUserData({});
 		navigation.navigate("SignIn");
 	};
 
-	const onEditProfilePressed = () => {
-		const userData = {
-			username: "JohnDoe",
-			profilePicture: "https://source.unsplash.com/200x200/?portrait",
-			totalScore: 500,
-		};
+	const onLogOutPressed = () => {
+		Alert.alert(
+			"Logout", // Title of the alert
+			"Are you sure you want to logout?", // Message
+			[
+				{
+					text: "Cancel",
+					onPress: () => console.log("Cancel Pressed"),
+					style: "cancel",
+				},
+				{
+					text: "OK",
+					onPress: () => logoutUser(), // Replace with your function to delete the user
+				},
+			],
+			{ cancelable: false }
+		);
+	};
 
+	const onEditProfilePressed = () => {
 		navigation.navigate("EditProfile");
 	};
 	const onGuessTheSongPressed = () => {
 		navigation.navigate("GuessTheSong");
-	};
-
-	const onGuessTheAlbumPressed = () => {
-		navigation.navigate("GuessTheAlbum");
 	};
 
 	const onLeaderboardPressed = () => {
@@ -57,7 +62,7 @@ const ProfileScreen = ({ route }) => {
 	};
 
 	const onProfilePressed = () => {
-		navigation.navigate("Profile");
+		// navigation.navigate("Profile");
 	};
 
 	const onHomePressed = () => {
@@ -90,12 +95,10 @@ const ProfileScreen = ({ route }) => {
 			>
 				<CustomHeader title="Profile" showBackButton={false} />
 				<View style={styles.userInfo}>
-					{profilePicture && (
-						<Image
-							source={{ uri: userData.profilePictureURL }}
-							style={styles.profilePicture}
-						/>
-					)}
+					<Image
+						source={{ uri: userData.profilePictureURL }}
+						style={styles.profilePicture}
+					/>
 
 					<Text style={styles.username}>{userData.username}</Text>
 
