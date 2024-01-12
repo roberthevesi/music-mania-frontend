@@ -12,12 +12,16 @@ import {
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import axios from "axios";
 import UserContext from "../../contexts/UserContext";
 import { useContext } from "react";
+import { useRoute } from "@react-navigation/native";
+import CustomBottomBar from "../../components/CustomBottomBar";
 
 const LeaderboardScreen = () => {
+	const route = useRoute();
+	const currentRoute = route.name;
 	const { userData, setUserData } = useContext(UserContext);
 
 	const navigation = useNavigation();
@@ -65,7 +69,7 @@ const LeaderboardScreen = () => {
 	const getTop10Users = async () => {
 		try {
 			const response = await axios.get(
-				"http://localhost:8080/api/users/get-top10-users",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/get-top10-users",
 				{
 					headers: {
 						Authorization: `Bearer ${userData.token}`,
@@ -81,73 +85,23 @@ const LeaderboardScreen = () => {
 		}
 	};
 
-	// const topPlayers = [
-	// 	{
-	// 		rank: 1,
-	// 		username: "Player1",
-	// 		medal: "🥇",
-	// 		totalScore: 1200,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 2,
-	// 		username: "Player2",
-	// 		medal: "🥈",
-	// 		totalScore: 1000,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 3,
-	// 		username: "Player3",
-	// 		medal: "🥉",
-	// 		totalScore: 800,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 4,
-	// 		username: "Player4",
-	// 		totalScore: 750,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 5,
-	// 		username: "Player5",
-	// 		totalScore: 720,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 6,
-	// 		username: "Player6",
-	// 		totalScore: 690,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 7,
-	// 		username: "Player7",
-	// 		totalScore: 660,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 8,
-	// 		username: "Player8",
-	// 		totalScore: 630,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 9,
-	// 		username: "Player9",
-	// 		totalScore: 600,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// 	{
-	// 		rank: 10,
-	// 		username: "Player10",
-	// 		totalScore: 580,
-	// 		image: "https://source.unsplash.com/200x200/?portrait",
-	// 	},
-	// ];
+	const CustomHeader = ({ title, showBackButton }) => {
+		const navigation = useNavigation();
 
-	// const topPlayers = getTop10Users();
+		return (
+			<View style={styles.headerContainer}>
+				{showBackButton && (
+					<TouchableOpacity
+						style={styles.backButton}
+						onPress={() => navigation.goBack()}
+					>
+						<Feather name="arrow-left" size={24} color="white" />
+					</TouchableOpacity>
+				)}
+				<Text style={styles.headerTitle}>{title}</Text>
+			</View>
+		);
+	};
 
 	return (
 		<View style={styles.container}>
@@ -155,11 +109,14 @@ const LeaderboardScreen = () => {
 				colors={["#673AB7", "#001F3F"]}
 				style={styles.linearGradient}
 			>
+				<CustomHeader
+					title="Global Leaderboard"
+					showBackButton={false}
+				/>
+
+				{/* <Text style={styles.topPlayersTitle}>Global Leaderboard</Text> */}
 				<ScrollView contentContainerStyle={styles.scrollContainer}>
 					<View style={styles.topPlayersContainer}>
-						<Text style={styles.topPlayersTitle}>
-							Global Leaderboard
-						</Text>
 						{topPlayers.map((player) => (
 							<View
 								key={player.rank}
@@ -207,7 +164,7 @@ const LeaderboardScreen = () => {
 										{player.username}
 									</Text>
 									<Text style={styles.totalScore}>
-										Total Score: {player.totalScore}
+										Score: {player.totalScore}
 									</Text>
 								</View>
 							</View>
@@ -215,51 +172,31 @@ const LeaderboardScreen = () => {
 					</View>
 				</ScrollView>
 
-				<View style={styles.bottomIconsContainer}>
-					<View style={styles.bottomIcons}>
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={onHomePressed}
-						>
-							<MaterialCommunityIcons
-								name="home"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Home</Text>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={onLeaderboardPressed}
-						>
-							<MaterialCommunityIcons
-								name="trophy"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Leaderboard</Text>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={onProfilePressed}
-						>
-							<MaterialCommunityIcons
-								name="account"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Profile</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
+				<CustomBottomBar />
 			</LinearGradient>
 		</View>
 	);
 };
 
 const styles = StyleSheet.create({
+	headerContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "center",
+		paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
+		paddingBottom: 10,
+		top: 65,
+	},
+	backButton: {
+		position: "absolute",
+		left: 10,
+		top: 0,
+	},
+	headerTitle: {
+		fontSize: 20,
+		fontWeight: "bold",
+		color: "white",
+	},
 	container: {
 		flex: 1,
 		paddingTop: Platform.OS === "android" ? StatusBar.currentHeight : 0,
@@ -271,31 +208,35 @@ const styles = StyleSheet.create({
 	scrollContainer: {
 		alignItems: "center",
 		justifyContent: "flex-start",
-		paddingHorizontal: 20,
+		paddingHorizontal: 30,
 	},
 	topPlayersContainer: {
 		marginTop: 100,
+		justifyContent: "center",
+		alignContent: "center",
 	},
 	topPlayersTitle: {
-		fontSize: 30,
+		fontSize: 20,
 		fontWeight: "bold",
 		color: "white",
 		marginBottom: 80,
+		alignContent: "center",
 	},
 	topPlayerItem: {
 		flexDirection: "row",
 		alignItems: "center",
-		marginBottom: 10,
+		marginBottom: 7,
 	},
 	top3Player: {
 		backgroundColor: "rgba(255,255,255,0.2)",
-		borderRadius: 10,
-		padding: 10,
+		borderRadius: 20,
+		padding: 7,
 	},
 	medal: {
 		fontSize: 20,
 		marginRight: 10,
 		marginLeft: 10,
+		color: "white",
 	},
 	medalContainer: {
 		marginRight: 10,
@@ -309,12 +250,12 @@ const styles = StyleSheet.create({
 	username: {
 		color: "white",
 		fontSize: 20,
-		marginBottom: 15,
+		marginBottom: 5,
 	},
 	bigUsername: {
 		fontSize: 25,
 		color: "white",
-		marginBottom: 15,
+		marginBottom: 5,
 	},
 	totalScore: {
 		color: "white",

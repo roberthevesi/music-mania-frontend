@@ -1,9 +1,5 @@
 import React from "react";
-import {
-	createNativeStackNavigator,
-	CardStyleInterpolators,
-	TransitionSpecs,
-} from "@react-navigation/native-stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
@@ -13,9 +9,7 @@ import NewPasswordScreen from "../screens/NewPasswordScreen";
 import HomeScreen from "../screens/HomeScreen";
 import LeaderboardScreen from "../screens/LeaderboardScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-//import GuessTheAlbumScreen from '../screens/GuessTheAlbumScreen';
 import GuessTheSongScreen from "../screens/GuessTheSongScreen";
-//import SettingsScreen from '../screens/SettingsScreen';
 import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();

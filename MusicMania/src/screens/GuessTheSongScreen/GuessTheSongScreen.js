@@ -19,6 +19,8 @@ import UserContext from "../../contexts/UserContext";
 import { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
+const chimeSoundUri = require("../../media/chime.mp3"); // Adjust the path as needed
+
 const GuessTheSongScreen = () => {
 	const navigation = useNavigation();
 
@@ -32,7 +34,7 @@ const GuessTheSongScreen = () => {
 	const fetchSongsAndSetRandomSong = async () => {
 		try {
 			const response = await axios.get(
-				"http://localhost:8080/api/songs/get-songs",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/songs/get-songs",
 				{
 					params: {
 						user_id: userData.id,
@@ -78,10 +80,28 @@ const GuessTheSongScreen = () => {
 		};
 	}, [sound]);
 
+	const playChimeSound = async () => {
+		try {
+			const { sound: chimeSound } = await Audio.Sound.createAsync(
+				chimeSoundUri,
+				{ shouldPlay: true }
+			);
+			await chimeSound.playAsync();
+			// Optionally, unload the chime sound after it has played
+			chimeSound.setOnPlaybackStatusUpdate(async (status) => {
+				if (status.didJustFinish) {
+					await chimeSound.unloadAsync();
+				}
+			});
+		} catch (error) {
+			console.error("Error playing chime sound:", error);
+		}
+	};
+
 	const updateUserScore = async (userId, newScore) => {
 		try {
 			const response = await axios.put(
-				`http://localhost:8080/api/users/update-user-score?userId=${userId}&newScore=${newScore}`,
+				`http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/update-user-score?userId=${userId}&newScore=${newScore}`,
 				{},
 				{
 					headers: {
@@ -112,6 +132,7 @@ const GuessTheSongScreen = () => {
 		};
 
 		if (song.id === currentSong.id) {
+			await playChimeSound();
 			const points = calculatePoints(wrongAttempts);
 
 			try {
@@ -184,6 +205,21 @@ const GuessTheSongScreen = () => {
 				style={styles.header}
 			/>
 
+			<View style={styles.totalScoreContainer}>
+				<View style={styles.totalScoreSquare}>
+					<Text style={styles.totalScoreLabel}>Score</Text>
+					<Text style={styles.totalScore}>
+						{userData.score}{" "}
+						<Feather
+							name="star"
+							size={20}
+							color="red"
+							style={styles.starIcon}
+						/>
+					</Text>
+				</View>
+			</View>
+
 			<View style={styles.contentContainer}>
 				<TouchableOpacity
 					style={styles.playContainer}
@@ -226,6 +262,33 @@ const GuessTheSongScreen = () => {
 };
 
 const styles = StyleSheet.create({
+	totalScoreContainer: {
+		flexDirection: "row",
+		alignItems: "center",
+		marginBottom: 0,
+	},
+	starIcon: {
+		marginLeft: 5,
+	},
+	totalScoreSquare: {
+		backgroundColor: "rgba(255, 255, 255, 0.1)",
+		borderRadius: 8,
+		paddingVertical: 15,
+		paddingHorizontal: 20,
+	},
+	totalScore: {
+		fontSize: 24,
+		color: "#FF3F3F",
+		fontWeight: "bold",
+		justifyContent: "center",
+	},
+	totalScoreLabel: {
+		marginLeft: 9,
+		fontSize: 16,
+		color: "white",
+		fontWeight: "bold",
+		marginBottom: 5,
+	},
 	// container: {
 	// 	flex: 1, // This makes sure the container takes up the whole screen
 	// },
@@ -247,7 +310,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 10,
 		width: "100%",
 		marginTop: 60,
-		marginBottom: 0,
+		marginBottom: 20,
 		// flex: 1,
 	},
 	backButton: {
@@ -276,7 +339,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		padding: 15,
 		// marginVertical: 10,
-		margin: 50,
+		margin: 40,
 		backgroundColor: "#FFF", // Background color for the play box
 		borderColor: "#673AB7", // Outline color
 		borderWidth: 1,
@@ -337,7 +400,7 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1,
-		// alignItems: "center",
+		alignItems: "center",
 		justifyContent: "center",
 	},
 	header: {
