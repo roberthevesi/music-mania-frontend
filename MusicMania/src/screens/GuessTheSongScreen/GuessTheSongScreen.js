@@ -19,10 +19,12 @@ import UserContext from "../../contexts/UserContext";
 import { useContext } from "react";
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-const chimeSoundUri = require("../../media/chime.mp3"); // Adjust the path as needed
+const chimeSoundUri = require("../../media/chime.mp3");
 
 const GuessTheSongScreen = () => {
 	const navigation = useNavigation();
+
+	const [songTimeout, setSongTimeout] = useState(null);
 
 	const [songs, setSongs] = useState([]);
 	const [sound, setSound] = useState();
@@ -65,6 +67,11 @@ const GuessTheSongScreen = () => {
 					{ shouldPlay: true }
 				);
 				setSound(newSound);
+
+				// Set a timeout to stop the song after 5 seconds
+				const timeout = setTimeout(() => {
+					newSound.stopAsync();
+				}, 7000); // 5000 milliseconds = 5 seconds
 			} catch (error) {
 				console.error("Error loading song:", error);
 			}
@@ -132,6 +139,12 @@ const GuessTheSongScreen = () => {
 		};
 
 		if (song.id === currentSong.id) {
+			if (sound) {
+				await sound.stopAsync(); // Stop the song
+				if (songTimeout) {
+					clearTimeout(songTimeout); // Clear the existing timeout
+				}
+			}
 			await playChimeSound();
 			const points = calculatePoints(wrongAttempts);
 
