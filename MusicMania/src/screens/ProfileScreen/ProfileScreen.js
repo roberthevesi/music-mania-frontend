@@ -9,7 +9,6 @@ import {
 	StyleSheet,
 	StatusBar,
 	Platform,
-	FlatList,
 	ScrollView,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -17,11 +16,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Feather } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import UserContext from "../../contexts/UserContext";
+import { useRoute } from "@react-navigation/native";
+import CustomBottomBar from "../../components/CustomBottomBar";
 
-import Logo from "../../../assets/images/record.png";
-import Logo_2 from "../../../assets/images/song.png";
-
-const ProfileScreen = ({ route }) => {
+const ProfileScreen = () => {
+	const route = useRoute();
+	const currentRoute = route.name;
 	const { userData, setUserData } = useContext(UserContext);
 
 	const navigation = useNavigation();
@@ -104,9 +104,7 @@ const ProfileScreen = ({ route }) => {
 
 					<View style={styles.totalScoreContainer}>
 						<View style={styles.totalScoreSquare}>
-							<Text style={styles.totalScoreLabel}>
-								Total Score:
-							</Text>
+							<Text style={styles.totalScoreLabel}>Score</Text>
 							<Text style={styles.totalScore}>
 								{userData.score}{" "}
 								<Feather
@@ -138,45 +136,7 @@ const ProfileScreen = ({ route }) => {
 					</TouchableOpacity>
 				</View>
 
-				<View style={styles.bottomIconsContainer}>
-					<View style={styles.bottomIcons}>
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={() => navigation.navigate("Home")}
-						>
-							<MaterialCommunityIcons
-								name="home"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Home</Text>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={onLeaderboardPressed}
-						>
-							<MaterialCommunityIcons
-								name="trophy"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Leaderboard</Text>
-						</TouchableOpacity>
-
-						<TouchableOpacity
-							style={styles.iconButton}
-							onPress={onProfilePressed}
-						>
-							<MaterialCommunityIcons
-								name="account"
-								size={30}
-								color="white"
-							/>
-							<Text style={styles.iconText}>Profile</Text>
-						</TouchableOpacity>
-					</View>
-				</View>
+				<CustomBottomBar />
 			</LinearGradient>
 		</ScrollView>
 	);
@@ -249,6 +209,7 @@ const styles = StyleSheet.create({
 		justifyContent: "center",
 	},
 	totalScoreLabel: {
+		marginLeft: 9,
 		fontSize: 16,
 		color: "white",
 		fontWeight: "bold",
@@ -294,6 +255,7 @@ const styles = StyleSheet.create({
 		justifyContent: "flex-start",
 		marginTop: "auto",
 		marginLeft: 0,
+		marginBottom: 80,
 	},
 	bottomButton: {
 		flexDirection: "row",
@@ -301,7 +263,7 @@ const styles = StyleSheet.create({
 		alignItems: "flex-start",
 		padding: 20,
 		borderRadius: 8,
-		marginBottom: 20,
+		marginBottom: 15,
 		marginRight: 200,
 	},
 
@@ -318,30 +280,30 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		marginLeft: 10,
 	},
-	bottomIconsContainer: {
-		width: "100%",
-		height: 80,
-		backgroundColor: "#673AB7",
-		paddingBottom: 35,
-	},
-	bottomIcons: {
-		flexDirection: "row",
-		justifyContent: "space-around",
-		alignItems: "center",
-		bottom: 0,
-		width: "100%",
-	},
+	// bottomIconsContainer: {
+	// 	width: "100%",
+	// 	height: 80,
+	// 	backgroundColor: "#673AB7",
+	// 	paddingBottom: 35,
+	// },
+	// bottomIcons: {
+	// 	flexDirection: "row",
+	// 	justifyContent: "space-around",
+	// 	alignItems: "center",
+	// 	bottom: 0,
+	// 	width: "100%",
+	// },
 
-	iconButton: {
-		marginTop: 10,
-		alignItems: "center",
-	},
-	iconText: {
-		fontSize: 13,
-		marginTop: 8,
-		textAlign: "center",
-		color: "white",
-	},
+	// iconButton: {
+	// 	marginTop: 10,
+	// 	alignItems: "center",
+	// },
+	// iconText: {
+	// 	fontSize: 13,
+	// 	marginTop: 8,
+	// 	textAlign: "center",
+	// 	color: "white",
+	// },
 });
 
 export default ProfileScreen;

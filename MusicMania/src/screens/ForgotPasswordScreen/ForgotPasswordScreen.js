@@ -24,17 +24,11 @@ const ForgotPasswordScreen = () => {
 	const onSendPressed = async () => {
 		console.log("email:", email);
 		try {
-			const url = `http://localhost:8080/api/users/send-forgot-password-code?email=${encodeURIComponent(
+			const url = `http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/send-forgot-password-code?email=${encodeURIComponent(
 				email
 			)}`;
 
 			const response = await axios.post(url);
-
-			// const response = await axios.post('http://localhost:8080/api/users/send-forgot-password-code', {
-			//     email: email
-			// });
-
-			// const code = response.data.code;
 
 			// console.log(response.data.code);
 			navigation.navigate("NewPassword", { email: email });

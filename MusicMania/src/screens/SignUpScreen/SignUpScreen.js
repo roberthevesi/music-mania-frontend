@@ -29,7 +29,7 @@ const SignUpScreen = () => {
 	const onRegisterPressed = async () => {
 		try {
 			const response = await axios.post(
-				"http://localhost:8080/api/users/send-new-user-code",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/send-new-user-code",
 				{
 					username: username,
 					email: email,

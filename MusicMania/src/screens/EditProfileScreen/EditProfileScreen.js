@@ -41,7 +41,7 @@ const EditProfileScreen = () => {
 	const deleteUser = async () => {
 		try {
 			const code_response = await axios.delete(
-				`http://localhost:8080/api/users/delete-user`,
+				`http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/delete-user`,
 				{
 					headers: {
 						Authorization: `Bearer ${userData.token}`,
@@ -130,7 +130,7 @@ const EditProfileScreen = () => {
 			console.log("new pass:", newPassword);
 
 			const response = await axios.put(
-				"http://localhost:8080/api/users/change-user-password",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/change-user-password",
 				null, // No body content for the PUT request
 				{
 					params: {
@@ -201,7 +201,7 @@ const EditProfileScreen = () => {
 			formData.append("userId", userData.id.toString());
 
 			const response = await axios.put(
-				"http://localhost:8080/api/users/update-user-profile-picture",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/update-user-profile-picture",
 				formData,
 				{
 					headers: {

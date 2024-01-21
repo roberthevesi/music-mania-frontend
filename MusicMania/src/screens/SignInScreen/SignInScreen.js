@@ -30,7 +30,7 @@ const SignInScreen = () => {
 	const onSignInPressed = async () => {
 		try {
 			const response = await axios.get(
-				"http://localhost:8080/api/users/get-user",
+				"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/get-user",
 				{
 					params: {
 						email: email,
@@ -50,7 +50,7 @@ const SignInScreen = () => {
 				// (which we have in response)
 
 				const token_response = await axios.get(
-					"http://localhost:8080/api/users/get-token",
+					"http://ec2-3-80-112-191.compute-1.amazonaws.com:8080/api/users/get-token",
 					{
 						headers: {
 							Authorization: authHeader,
